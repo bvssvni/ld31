@@ -3,7 +3,7 @@ ld31
 
 My entry for Ludum Dare 31
 
-![./screenshot.png]
+![screenshot](./screenshot.png)
 
 To compile you need to install [Rust](http://www.rust-lang.org/)
 
