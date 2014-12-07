@@ -1,0 +1,10 @@
+[package]
+
+name = "seabirdsbreakfast"
+version = "0.0.1"
+authors = ["Sven Nilsen <bvssvni@gmail.com>"]
+
+[dependencies.piston]
+
+git = "https://github.com/pistondevelopers/piston"
+
