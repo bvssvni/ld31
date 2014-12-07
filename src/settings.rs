@@ -36,7 +36,7 @@ pub mod player {
     use piston::input::{ Button };
     use piston::input::keyboard::Key;
 
-    pub const SPEEDUP: f64 = 1.0;
+    pub const SPEEDUP: f64 = 10.0;
     pub const RADIUS: f64 = 5.0;
     pub const START_POS: [f64, ..2] = [100.0, 100.0];
     pub const START_VEL: [f64, ..2] = [0.0, 0.0];
@@ -151,3 +151,45 @@ pub mod palm_trees {
         }
     }
 }
+
+pub mod sea_birds {
+    pub const RADIUS: f64 = 5.0;
+    pub const TEST_COLOR: [f32, ..4] = [1.0, 1.0, 0.0, 1.0];
+    pub const SPEEDUP: f64 = 10.0;
+
+    pub mod circling {
+        // How many segments to split up circling.
+        pub const N: f64 = 32.0;
+        // Must be within 5 pixels of target to go to next.
+        pub const ADVANCE_RADIUS: f64 = 5.0;
+        pub const SPEED: f64 = 4.0;
+        pub const RADIUS: f64 = 50.0;
+    }
+ 
+    pub fn load() {
+        use current_sea_birds;
+        use sea_birds::SeaBird;
+
+        let sea_birds = &mut *current_sea_birds();
+
+        // Just split by comma.
+        let data = include_str!("../assets/sea_birds.txt");
+        let mut data_split = data.split_str(",");
+        loop {
+            let x: f64 = match data_split.next() {
+                    None => { break; }
+                    Some(x) => from_str(x.trim()).unwrap()
+                };
+            let y: f64 = match data_split.next() {
+                    None => { break; }
+                    Some(x) => from_str(x.trim()).unwrap()
+                };
+            sea_birds.birds.push(SeaBird::new(
+                    [0.0, 0.0],
+                    [x, y],
+                    sea_birds.behavior.clone(),
+                ));
+        }
+    }
+}
+

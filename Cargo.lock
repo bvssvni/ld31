@@ -43,7 +43,7 @@ dependencies = [
 [[package]]
 name = "conrod"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/conrod#cdaefb2b4e7df16c77170b265d7e5c4fc350c03d"
+source = "git+https://github.com/pistondevelopers/conrod#dd7d681c31291e9667065128315bad36ece152eb"
 dependencies = [
  "event 0.0.0 (git+https://github.com/pistondevelopers/event)",
  "freetype-rs 0.0.0 (git+https://github.com/PistonDevelopers/freetype-rs.git)",
@@ -61,7 +61,7 @@ source = "git+https://github.com/pistondevelopers/current#ad63ba6a342071ddbcc165
 [[package]]
 name = "device"
 version = "0.1.0"
-source = "git+https://github.com/gfx-rs/gfx-rs#db9dae00190bf4509a8920156bc0c77096677620"
+source = "git+https://github.com/gfx-rs/gfx-rs#2f484bf41d7fc3d1f25901625c53bd148ffbc9a2"
 dependencies = [
  "gfx_gl 0.1.0 (git+https://github.com/gfx-rs/gfx_gl.git)",
 ]
@@ -77,7 +77,7 @@ dependencies = [
 [[package]]
 name = "dsp-chain"
 version = "0.0.0"
-source = "git+https://github.com/RustAudio/dsp-chain#476b1ff111399e3edf7b70abbb712d297be1ec93"
+source = "git+https://github.com/RustAudio/dsp-chain#007c76bcc4f8a69bff0bbf0c7ec21e293be1ced2"
 dependencies = [
  "sound_stream 0.1.0 (git+https://github.com/RustAudio/sound_stream)",
 ]
@@ -99,7 +99,7 @@ version = "0.0.0"
 source = "git+https://github.com/pistondevelopers/event_loop#b2a47dd133069467b3ec83d4ff3d585789d6a851"
 dependencies = [
  "current 0.0.0 (git+https://github.com/pistondevelopers/current)",
- "time 0.1.0 (git+https://github.com/rust-lang/time)",
+ "time 0.1.1 (git+https://github.com/rust-lang/time)",
 ]
 
 [[package]]
@@ -107,7 +107,7 @@ name = "fps_counter"
 version = "0.0.0"
 source = "git+https://github.com/pistondevelopers/fps_counter#7662c6a357eef007825bc4cdfe4ce555d4d5d4ee"
 dependencies = [
- "time 0.1.0 (git+https://github.com/rust-lang/time)",
+ "time 0.1.1 (git+https://github.com/rust-lang/time)",
 ]
 
 [[package]]
@@ -118,7 +118,7 @@ source = "git+https://github.com/PistonDevelopers/freetype-rs.git#994de62bd9117d
 [[package]]
 name = "gcc"
 version = "0.1.0"
-source = "git+https://github.com/alexcrichton/gcc-rs#6b60df5cec47c6e74d8f86a1216e202268727a72"
+source = "git+https://github.com/alexcrichton/gcc-rs#3caf7309ef72644cd56a9d3a6f515ae553683176"
 
 [[package]]
 name = "genmesh"
@@ -128,7 +128,7 @@ source = "git+https://github.com/csherratt/genmesh.git#ef4494db1eb9b3a2f13e7c555
 [[package]]
 name = "gfx"
 version = "0.1.0"
-source = "git+https://github.com/gfx-rs/gfx-rs#db9dae00190bf4509a8920156bc0c77096677620"
+source = "git+https://github.com/gfx-rs/gfx-rs#2f484bf41d7fc3d1f25901625c53bd148ffbc9a2"
 dependencies = [
  "device 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
  "gfx_macros 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
@@ -158,7 +158,7 @@ dependencies = [
 [[package]]
 name = "gfx_macros"
 version = "0.1.0"
-source = "git+https://github.com/gfx-rs/gfx-rs#db9dae00190bf4509a8920156bc0c77096677620"
+source = "git+https://github.com/gfx-rs/gfx-rs#2f484bf41d7fc3d1f25901625c53bd148ffbc9a2"
 
 [[package]]
 name = "gfx_texture"
@@ -196,7 +196,7 @@ dependencies = [
 [[package]]
 name = "graphics"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/graphics#409f2c08c6fb71c1e7013f32a0e12e75d6e4f3cc"
+source = "git+https://github.com/pistondevelopers/graphics#8a0f9b0cd3d8d04e2db30d2495713713bd6d14ff"
 dependencies = [
  "current 0.0.0 (git+https://github.com/pistondevelopers/current)",
  "read_color 0.0.1 (git+https://github.com/pistondevelopers/read_color)",
@@ -207,7 +207,7 @@ dependencies = [
 [[package]]
 name = "image"
 version = "0.2.0-alpha.2"
-source = "git+https://github.com/pistondevelopers/image#cd87733f9f232ea2ffd98bede995e10369391fa8"
+source = "git+https://github.com/pistondevelopers/image#f7d33a9bac29556eca33060aafd615a907c509f2"
 
 [[package]]
 name = "img_hash"
@@ -240,7 +240,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "opengl_graphics"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/opengl_graphics#fbf15e4f9f494e635fdf1667be317b35c727705f"
+source = "git+https://github.com/pistondevelopers/opengl_graphics#511331bb801cfbd7a148406f0b2f1871cac5bd7b"
 dependencies = [
  "freetype-rs 0.0.0 (git+https://github.com/PistonDevelopers/freetype-rs.git)",
  "gl 0.0.1 (git+https://github.com/bjz/gl-rs)",
@@ -253,8 +253,9 @@ dependencies = [
 [[package]]
 name = "piston"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/piston#34234bdb0d1ee4fd17480a3ede81431aca66f24c"
+source = "git+https://github.com/pistondevelopers/piston#3ff24a3554134e5bb36f71a0fd810d4bf48592ad"
 dependencies = [
+ "ai_behavior 0.0.0 (git+https://github.com/pistondevelopers/ai_behavior)",
  "astar 0.0.3 (git+https://github.com/TyOverby/astar)",
  "cam 0.0.0 (git+https://github.com/pistondevelopers/cam)",
  "conrod 0.0.0 (git+https://github.com/pistondevelopers/conrod)",
@@ -290,7 +291,7 @@ source = "git+https://github.com/pistondevelopers/read_color#c563f9f02a0879353f1
 [[package]]
 name = "render"
 version = "0.1.0"
-source = "git+https://github.com/gfx-rs/gfx-rs#db9dae00190bf4509a8920156bc0c77096677620"
+source = "git+https://github.com/gfx-rs/gfx-rs#2f484bf41d7fc3d1f25901625c53bd148ffbc9a2"
 dependencies = [
  "device 0.1.0 (git+https://github.com/gfx-rs/gfx-rs)",
 ]
@@ -313,7 +314,7 @@ source = "git+https://github.com/AngryLawyer/rust-sdl2#81daa9f8eed74e154f34597cd
 [[package]]
 name = "sdl2_window"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/sdl2_window#3b1d89f5a41c34450934156f66bcf728e19044f7"
+source = "git+https://github.com/pistondevelopers/sdl2_window#ca4e5d89d67a502ffa31ceb99781192cb38cea50"
 dependencies = [
  "gl 0.0.1 (git+https://github.com/bjz/gl-rs)",
  "input 0.0.0 (git+https://github.com/pistondevelopers/input)",
@@ -325,7 +326,7 @@ dependencies = [
 [[package]]
 name = "select_color"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/select_color#1febf5dae0e949e451a634942acb0862bde88ad7"
+source = "git+https://github.com/pistondevelopers/select_color#fbac958aef7db828383f46dbec1e66d2f316b82c"
 dependencies = [
  "image 0.2.0-alpha.2 (git+https://github.com/pistondevelopers/image)",
 ]
@@ -333,7 +334,7 @@ dependencies = [
 [[package]]
 name = "shader_version"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/shader_version#32364088516495b11b5ac484df923c9fc2854b85"
+source = "git+https://github.com/pistondevelopers/shader_version#9b1ec24a100505f338c45e7878b54594afe62b5d"
 
 [[package]]
 name = "sound_stream"
@@ -341,7 +342,7 @@ version = "0.1.0"
 source = "git+https://github.com/RustAudio/sound_stream#12c1b8ee98fc70540398717c7abe9cd0767a0e25"
 dependencies = [
  "rust-portaudio 0.3.0 (git+https://github.com/jeremyletang/rust-portaudio)",
- "time 0.1.0 (git+https://github.com/rust-lang/time)",
+ "time 0.1.1 (git+https://github.com/rust-lang/time)",
 ]
 
 [[package]]
@@ -371,8 +372,8 @@ dependencies = [
 
 [[package]]
 name = "time"
-version = "0.1.0"
-source = "git+https://github.com/rust-lang/time#b8e219aa9fca15ed1377a7d62aff1eb4378f3ba4"
+version = "0.1.1"
+source = "git+https://github.com/rust-lang/time#c22414be22894905e4692896da4d2d246a361797"
 dependencies = [
  "gcc 0.1.0 (git+https://github.com/alexcrichton/gcc-rs)",
 ]
@@ -380,7 +381,7 @@ dependencies = [
 [[package]]
 name = "uuid"
 version = "0.1.0"
-source = "git+https://github.com/rust-lang/uuid#b35eddc2b6410e2ef1fcc2af74cc54c6c5ff08f2"
+source = "git+https://github.com/rust-lang/uuid#25824208b460cab6bded2c8cad82910b1e64d0e6"
 
 [[package]]
 name = "vecmath"

@@ -1,8 +1,19 @@
 
+#![allow(dead_code)]
+
+bitflags! {
+    flags KeyState: u8 {
+        const LEFT = 0b1,
+        const RIGHT = 0b10,
+        const UP = 0b100,
+        const DOWN = 0b1000,
+    }
+}
+
 pub struct Player {
     pub pos: [f64, ..2],
     pub vel: [f64, ..2],
-    pub acc: [f64, ..2],
+    pub key_state: KeyState,
 }
 
 pub fn update_player(dt: f64) {
@@ -15,7 +26,7 @@ pub fn update_player(dt: f64) {
     use piston::vecmath::vec2_len as len;
     use piston::vecmath::vec2_square_len as square_len;
     use settings::WATER_FRICTION;
-    use settings::player::SPEEDUP;
+    use settings::player::{ ACC, SPEEDUP };
     use std::num::Float;
 
     let dt = dt * SPEEDUP;
@@ -25,13 +36,25 @@ pub fn update_player(dt: f64) {
     let rocks = &mut *current_rocks();    
     let friction = WATER_FRICTION;
 
-    let next_vel = add(player.vel, scale(player.acc, dt));
+    let mut acc: [f64, ..2] = [0.0, 0.0];
+    if player.key_state.contains(LEFT) {
+        acc[0] -= ACC;
+    }
+    if player.key_state.contains(RIGHT) {
+        acc[0] += ACC;
+    }
+    if player.key_state.contains(DOWN) {
+        acc[1] += ACC;
+    }
+    if player.key_state.contains(UP) {
+        acc[1] -= ACC;
+    }
+
+    let next_vel = add(player.vel, scale(acc, dt));
     let next_vel_square_len = square_len(next_vel);
     let drag = 1.0 / (next_vel_square_len * friction).exp();
     let next_vel = scale(next_vel, drag);
 
-    // println!("TEST drag {}", drag);
- 
     let avg_vel = scale(add(player.vel, next_vel), 0.5);
     let dir = stream.at(player.pos);
     let next_pos = add(player.pos, add(scale(dir, dt), scale(avg_vel, dt)));
@@ -50,40 +73,3 @@ pub fn update_player(dt: f64) {
         player.pos = next_pos;
     }
 }
-
-pub fn move_left() {
-    use current_player;
-    use settings::player::ACC;    
-
-    let player = &mut *current_player();
-
-    player.acc = [-ACC, 0.0];
-}
-
-pub fn move_right() {
-    use current_player;
-    use settings::player::ACC;    
-
-    let player = &mut *current_player();
-
-    player.acc = [ACC, 0.0];
-}
-
-pub fn move_up() {
-    use current_player;
-    use settings::player::ACC;    
-
-    let player = &mut *current_player();
-
-    player.acc = [0.0, -ACC];
-}
-
-pub fn move_down() {
-    use current_player;
-    use settings::player::ACC;    
-
-    let player = &mut *current_player();
-
-    player.acc = [0.0, ACC];
-}
-

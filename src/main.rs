@@ -13,6 +13,7 @@ mod render;
 mod rocks;
 mod settings;
 mod stream;
+mod sea_birds;
 
 fn main() {
     let opengl = piston::shader_version::opengl::OpenGL::OpenGL_3_2;
@@ -70,7 +71,7 @@ fn setup() {
     let mut player = player::Player {
             pos: settings::player::START_POS,
             vel: settings::player::START_VEL,
-            acc: [0.0, ..2],
+            key_state: player::KeyState::empty(),
         };
     let mut rocks = rocks::Rocks { rocks: Vec::new() };
     let mut selected_arrow = stream::SelectedArrow(None);
@@ -81,6 +82,7 @@ fn setup() {
         time_since_last_drop: 0.0,
     };
     let mut palm_trees = palm_trees::PalmTrees { palms: Vec::new() };
+    let mut sea_birds = sea_birds::SeaBirds::new();
 
     let stream_guard = CurrentGuard::new(&mut stream);
     let moving_arrows = CurrentGuard::new(&mut moving_arrows);
@@ -91,6 +93,7 @@ fn setup() {
     let blood_bar_guard = CurrentGuard::new(&mut blood_bar);
     let blood_guard = CurrentGuard::new(&mut blood);
     let palm_trees_guard = CurrentGuard::new(&mut palm_trees);
+    let sea_birds_guard = CurrentGuard::new(&mut sea_birds);
 
     start();
     
@@ -103,6 +106,7 @@ fn setup() {
     drop(blood_bar_guard);
     drop(blood_guard);
     drop(palm_trees_guard);
+    drop(sea_birds_guard);
 }
 
 fn sea_rect() -> [f64, ..4] {
@@ -125,11 +129,13 @@ pub fn current_you_lose_text() -> Current<render::YouLoseText> { Current }
 pub fn current_blood() -> Current<blood::Blood> { Current }
 pub fn current_palm_tree() -> Current<render::PalmTree> { Current }
 pub fn current_palm_trees() -> Current<palm_trees::PalmTrees> { Current }
+pub fn current_sea_birds() -> Current<sea_birds::SeaBirds> { Current }
 
 fn start() {
     stream::refresh_moving_arrows();
     settings::rocks::load();
     settings::palm_trees::load();
+    settings::sea_birds::load();
 
     let mut cursor: [f64, ..2] = [0.0, ..2];
     for e in piston::events() {
@@ -156,6 +162,10 @@ fn start() {
 
             game::update_game_state();
         });
+        if game::should_update() {
+            sea_birds::update_sea_birds(&e);
+        }
+
         e.mouse_cursor(|x, y| {
             cursor = [x, y];
             stream::edit_selected_arrow(cursor);
@@ -166,32 +176,44 @@ fn start() {
                 stream::refresh_moving_arrows();
             }
             if button == settings::utils::PRINT_CURSOR_POS {
-                println!("{}, {}", cursor[0], cursor[1]);
+                println!("{}, {},", cursor[0], cursor[1]);
             }
             if button == settings::utils::PRINT_PLAYER_POS {
                 let pos = current_player().pos;
-                println!("{}, {}", pos[0], pos[1]);
+                println!("{}, {},", pos[0], pos[1]);
             }
 
             if button == settings::utils::PRINT_HAS_WON {
                 println!("{}", game::won());
             }
             if button == settings::player::MOVE_LEFT_BUTTON {
-                player::move_left();
+                current_player().key_state.insert(player::LEFT);
             }
             if button == settings::player::MOVE_RIGHT_BUTTON {
-                player::move_right();
+                current_player().key_state.insert(player::RIGHT);
             }
             if button == settings::player::MOVE_UP_BUTTON {
-                player::move_up();
+                current_player().key_state.insert(player::UP);
             }
             if button == settings::player::MOVE_DOWN_BUTTON {
-                player::move_down();
+                current_player().key_state.insert(player::DOWN);
             }
         });
         e.release(|button| {
             if button == settings::stream::ADD_ARROW_BUTTON {
                 stream::deselect_arrow();
+            }
+            if button == settings::player::MOVE_LEFT_BUTTON {
+                current_player().key_state.remove(player::LEFT);
+            }
+            if button == settings::player::MOVE_RIGHT_BUTTON {
+                current_player().key_state.remove(player::RIGHT);
+            }
+            if button == settings::player::MOVE_UP_BUTTON {
+                current_player().key_state.remove(player::UP);
+            }
+            if button == settings::player::MOVE_DOWN_BUTTON {
+                current_player().key_state.remove(player::DOWN);
             }
         });
 

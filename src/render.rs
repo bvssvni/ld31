@@ -14,6 +14,7 @@ pub fn render(c: &Context, g: &mut Gl) {
     rocks(c, g);
     palm_tree(c, g);
     player(c, g);
+    sea_birds(c, g);
     blood_bar(c, g);
     you_win(c, g);
     you_lose(c, g);
@@ -177,6 +178,21 @@ pub fn palm_tree(c: &Context, g: &mut Gl) {
 
     for pos in palm_trees.palms.iter() {
         image(texture, &c.trans(pos[0], pos[1]), g);
+    }
+}
+
+pub fn sea_birds(c: &Context, g: &mut Gl) {
+    use current_sea_birds;
+    use piston::graphics::Rectangle;
+    use piston::graphics::rectangle::centered_square;
+    use settings::sea_birds::{ RADIUS, TEST_COLOR };
+
+    let sea_birds = &mut *current_sea_birds();
+
+    let rect = Rectangle::new(TEST_COLOR);
+    for sea_bird in sea_birds.birds.iter() {
+        let [x, y] = sea_bird.pos;
+        rect.draw(centered_square(x, y, RADIUS), c, g);
     }
 }
 
