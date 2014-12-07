@@ -10,10 +10,31 @@ bitflags! {
     }
 }
 
+pub enum State {
+    Bitten(f64),
+    Normal,
+}
+
 pub struct Player {
     pub pos: [f64, ..2],
     pub vel: [f64, ..2],
     pub key_state: KeyState,
+    pub time_since_last_frame_update: f64,
+    pub frame: uint,
+    pub state: State,
+}
+
+impl Player {
+    pub fn new(pos: [f64, ..2]) -> Player {
+        Player {
+            pos: pos,
+            vel: [0.0, 0.0],
+            key_state: KeyState::empty(),
+            time_since_last_frame_update: 0.0,
+            frame: 0,
+            state: State::Normal,
+        }
+    }
 }
 
 pub fn update_player(dt: f64) {
@@ -26,7 +47,7 @@ pub fn update_player(dt: f64) {
     use piston::vecmath::vec2_len as len;
     use piston::vecmath::vec2_square_len as square_len;
     use settings::WATER_FRICTION;
-    use settings::player::{ ACC, SPEEDUP };
+    use settings::player::{ ACC, FRAME_INTERVAL, FRAMES, SPEEDUP };
     use std::num::Float;
 
     let dt = dt * SPEEDUP;
@@ -35,6 +56,27 @@ pub fn update_player(dt: f64) {
     let player = &mut *current_player();
     let rocks = &mut *current_rocks();    
     let friction = WATER_FRICTION;
+
+    player.time_since_last_frame_update += dt;
+    if player.time_since_last_frame_update > FRAME_INTERVAL {
+        if player.key_state.contains(UP) {
+            player.frame = (player.frame + FRAMES.len() - 1) % FRAMES.len();
+        } else {
+            player.frame = (player.frame + 1) % FRAMES.len();
+        }
+        player.time_since_last_frame_update -= FRAME_INTERVAL;
+    }
+    player.state = match player.state {
+            State::Normal => State::Normal,
+            State::Bitten(sec) => {
+                let new_sec = sec - dt;
+                if new_sec < 0.0 {
+                    State::Normal
+                } else {
+                    State::Bitten(new_sec)
+                }
+            }
+        };
 
     let mut acc: [f64, ..2] = [0.0, 0.0];
     if player.key_state.contains(LEFT) {

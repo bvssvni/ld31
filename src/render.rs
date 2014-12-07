@@ -5,9 +5,14 @@ pub struct BloodText(pub Texture);
 pub struct YouWinText(pub Texture);
 pub struct YouLoseText(pub Texture);
 pub struct PalmTree(pub Texture);
+pub struct SeaBird(pub Texture);
+pub struct Rock(pub Texture);
+pub struct Character(pub Texture);
 
 pub fn render(c: &Context, g: &mut Gl) {
-    stream_arrows(c, g);    
+    use settings::EDIT;
+
+    if EDIT { stream_arrows(c, g); }
     moving_arrows(c, g);
     blood(c, g);
     beach(c, g);
@@ -62,26 +67,51 @@ pub fn beach(c: &Context, g: &mut Gl) {
 
 pub fn player(c: &Context, g: &mut Gl) {
     use current_player;
-    use piston::graphics::Rectangle;
-    use piston::graphics::rectangle::centered_square;
-    use settings::player::{ TEST_COLOR, RADIUS };
+    use current_character;
+    use piston::graphics::{ Image, RelativeTransform, SrcRect };
+    use piston::graphics::interpolation::lerp_4;
+    use piston::current::Set;
+    use player::State;
+    use settings::player::{ 
+        FRAMES, BITTEN_COLOR, BITTEN_FADE_OUT_SECONDS,
+    };
 
+    let &Character(ref texture ) = &mut *current_character();
     let player = &mut *current_player();
-    let [x, y, radius] = [player.pos[0], player.pos[1], RADIUS];
-    Rectangle::new(TEST_COLOR).draw(centered_square(x, y, radius), c, g);
+    let [x, y] = player.pos;
+    // Rectangle::new(TEST_COLOR).draw(centered_square(x, y, radius), c, g);
+    let frame = FRAMES[player.frame];
+    match player.state {
+        State::Bitten(sec) => {
+            let t = 1.0 - sec / BITTEN_FADE_OUT_SECONDS;
+            let color = lerp_4(&BITTEN_COLOR, &[1.0, ..4], &(t as f32));
+            Image::colored(color)
+        }
+        _ => Image::new()
+    }.set(SrcRect(frame)).draw(texture, 
+        &c.trans(x, y)
+          .zoom(2.0)
+          .trans(-0.5 * frame[2] as f64, -0.5 * frame[3] as f64), 
+        g
+    );
 }
 
 pub fn rocks(c: &Context, g: &mut Gl) {
     use current_rocks;
-    use piston::graphics::Ellipse;
-    use piston::graphics::ellipse::circle;
-    use settings::rocks::{ TEST_COLOR, RADIUS };
+    use current_rock;
+    use piston::graphics::image;
+    use piston::graphics::RelativeTransform;
+    use piston::graphics::ImageSize;
 
+    let &Rock(ref texture) = &mut *current_rock();
+    let (w, h) = texture.get_size();
+    let (w, h) = (w as f64, h as f64);
     let rocks = &mut *current_rocks();
-    let ellipse = Ellipse::new(TEST_COLOR);
+    // let ellipse = Ellipse::new(TEST_COLOR);
     for rock in rocks.rocks.iter() {
-        let [x, y, radius] = [rock.pos[0], rock.pos[1], RADIUS];
-        ellipse.draw(circle(x, y, radius), c, g);
+        let [x, y] = rock.pos;
+        // ellipse.draw(circle(x, y, radius), c, g);
+        image(texture, &c.trans(x, y).zoom(1.05).trans(-0.5 * w, -0.5 * h), g);
     }
 }
 
@@ -153,7 +183,7 @@ pub fn blood(c: &Context, g: &mut Gl) {
     use current_blood;
     use piston::graphics::Ellipse;
     use piston::graphics::ellipse::circle;
-    use settings::blood::{ test_color, RADIUS, SPAN };
+    use settings::blood::{ test_color, RADIUS, SPAN, START_RADIUS };
 
     let blood = &mut *current_blood();
 
@@ -161,7 +191,7 @@ pub fn blood(c: &Context, g: &mut Gl) {
     for blood_drop in blood.blood_drops.iter().filter(|e| !e.dead) {
         let [x, y] = blood_drop.pos;
         let f = blood_drop.time / SPAN;
-        let radius = RADIUS * f;
+        let radius = START_RADIUS + (RADIUS - START_RADIUS) * f;
         let alpha = 1.0 - f;
         Ellipse::new([red, green, blue, alpha as f32]).draw(circle(x, y, radius), c, g);
     }
@@ -183,16 +213,19 @@ pub fn palm_tree(c: &Context, g: &mut Gl) {
 
 pub fn sea_birds(c: &Context, g: &mut Gl) {
     use current_sea_birds;
-    use piston::graphics::Rectangle;
-    use piston::graphics::rectangle::centered_square;
-    use settings::sea_birds::{ RADIUS, TEST_COLOR };
+    use current_sea_bird;
+    use piston::graphics::image;
+    use piston::graphics::RelativeTransform;
 
     let sea_birds = &mut *current_sea_birds();
+    let &SeaBird(ref texture) = &mut *current_sea_bird();
 
-    let rect = Rectangle::new(TEST_COLOR);
+    // let rect = Rectangle::new(TEST_COLOR);
     for sea_bird in sea_birds.birds.iter() {
         let [x, y] = sea_bird.pos;
-        rect.draw(centered_square(x, y, RADIUS), c, g);
+        let [dx, dy] = sea_bird.dir;
+        // rect.draw(centered_square(x, y, RADIUS), c, g);
+        image(texture, &c.trans(x, y).orient(dx, dy).zoom(2.0).trans(-5.0, -6.0), g);
     }
 }
 

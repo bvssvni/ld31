@@ -2,6 +2,7 @@ use piston::graphics::color::hex;
 
 pub const BEACH_ELLIPSE: [f64, ..4] = [500.0, -500.0, 1000.0, 1500.0];
 pub const WATER_FRICTION: f64 = 0.00002;
+pub const EDIT: bool = false;
 
 pub fn background_color() -> [f32, ..4] {
     hex("49B1DE")
@@ -18,6 +19,7 @@ pub mod utils {
     pub const PRINT_CURSOR_POS: Button = Button::Keyboard(Key::C);
     pub const PRINT_PLAYER_POS: Button = Button::Keyboard(Key::P);
     pub const PRINT_HAS_WON: Button = Button::Keyboard(Key::W);
+    pub const PRINT_STREAM: Button = Button::Keyboard(Key::S);
     pub const RESTART_LEVEL: Button = Button::Keyboard(Key::Return);
 }
 
@@ -36,11 +38,24 @@ pub mod player {
     use piston::input::{ Button };
     use piston::input::keyboard::Key;
 
-    pub const SPEEDUP: f64 = 10.0;
-    pub const RADIUS: f64 = 5.0;
+    pub const SPEEDUP: f64 = 2.0;
+    // pub const RADIUS: f64 = 5.0;
     pub const START_POS: [f64, ..2] = [100.0, 100.0];
-    pub const START_VEL: [f64, ..2] = [0.0, 0.0];
-    pub const TEST_COLOR: [f32, ..4] = [1.0, ..4];
+    // pub const START_VEL: [f64, ..2] = [0.0, 0.0];
+    // pub const TEST_COLOR: [f32, ..4] = [1.0, ..4];
+    pub const BITTEN_COLOR: [f32, ..4] = [1.0, 0.0, 0.0, 1.0];
+    pub const BITTEN_FADE_OUT_SECONDS: f64 = 2.0;
+    pub static FRAMES: &'static [[i32, ..4]] = &[
+        [0, 0, 16, 16],
+        [16, 0, 16, 16],
+        [32, 0, 16, 16],
+        [48, 0, 16, 16],
+        [0, 16, 16, 16],
+        [16, 16, 16, 16],
+        [32, 16, 16, 16],
+        [48, 16, 16, 16]
+    ];
+    pub static FRAME_INTERVAL: f64 = 0.2;
 
     pub const MOVE_LEFT_BUTTON: Button = Button::Keyboard(Key::Left);
     pub const MOVE_RIGHT_BUTTON: Button = Button::Keyboard(Key::Right);
@@ -60,14 +75,49 @@ pub mod stream {
     pub const ARROW_SIZE: f64 = 5.0;
     pub const SAMPLE_SIZE: f64 = 25.0;
     // pub const SAMPLE_COLOR: [f32, ..4] = [0.5, 0.5, 0.0, 1.0];
-    pub const MOVING_ARROW_COLOR: [f32, ..4] = [0.5, 0.5, 0.0, 1.0];
+    pub const MOVING_ARROW_COLOR: [f32, ..4] = [1.0, 1.0, 0.8, 1.0];
     pub const MOVING_ARROW_TIME_SPAN: f64 = 40.0;
     pub const SPEEDUP: f64 = 1.0;
     pub const PHASE_VEL: f64 = 1.0 / 7.0;
+    
+    pub fn load() {
+        use current_stream;
+        use stream::Arrow;
+
+        let stream = &mut *current_stream();
+
+        // Just split by comma.
+        let data = include_str!("../assets/stream.txt");
+        let mut data_split = data.split_str(",");
+        loop {
+            let x: f64 = match data_split.next() {
+                    None => { break; }
+                    Some(x) => from_str(x.trim()).unwrap()
+                };
+            let y: f64 = match data_split.next() {
+                    None => { break; }
+                    Some(x) => from_str(x.trim()).unwrap()
+                };
+            let dx: f64 = match data_split.next() {
+                    None => { break; }
+                    Some(x) => from_str(x.trim()).unwrap()
+                };
+            let dy: f64 = match data_split.next() {
+                    None => { break; }
+                    Some(x) => from_str(x.trim()).unwrap()
+                };
+            let phase: f64 = match data_split.next() {
+                    None => { break; }
+                    Some(x) => from_str(x.trim()).unwrap()
+                };
+            stream.arrows.push(Arrow { pos: [x, y], dir: [dx, dy] });            
+            stream.arrow_phases.push(phase);
+        }
+    }
 }
 
 pub mod rocks {
-    pub const TEST_COLOR: [f32, ..4] = [0.6, 0.6, 0.6, 1.0];
+    // pub const TEST_COLOR: [f32, ..4] = [0.6, 0.6, 0.6, 1.0];
     pub const RADIUS: f64 = 20.0;
 
     pub fn load() {
@@ -118,7 +168,8 @@ pub mod blood_bar {
 }
 
 pub mod blood {
-    pub const DROP_INTERVAL: f64 = 1.0;
+    pub const DROP_INTERVAL: f64 = 0.2;
+    pub const START_RADIUS: f64 = 4.0;
     pub const RADIUS: f64 = 10.0;
     pub const SPAN: f64 = 50.0;
 
@@ -153,13 +204,13 @@ pub mod palm_trees {
 }
 
 pub mod sea_birds {
-    pub const RADIUS: f64 = 5.0;
-    pub const TEST_COLOR: [f32, ..4] = [1.0, 1.0, 0.0, 1.0];
-    pub const SPEEDUP: f64 = 10.0;
+    // pub const RADIUS: f64 = 5.0;
+    // pub const TEST_COLOR: [f32, ..4] = [1.0, 1.0, 0.0, 1.0];
+    pub const SPEEDUP: f64 = 5.0;
 
     pub mod circling {
         // How many segments to split up circling.
-        pub const N: f64 = 32.0;
+        pub const N: f64 = 128.0;
         // Must be within 5 pixels of target to go to next.
         pub const ADVANCE_RADIUS: f64 = 5.0;
         pub const SPEED: f64 = 4.0;
@@ -185,7 +236,7 @@ pub mod sea_birds {
                     Some(x) => from_str(x.trim()).unwrap()
                 };
             sea_birds.birds.push(SeaBird::new(
-                    [0.0, 0.0],
+                    [x, y],
                     [x, y],
                     sea_birds.behavior.clone(),
                 ));

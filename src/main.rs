@@ -37,16 +37,25 @@ fn load_assets(f: ||) {
     let you_win = Path::new("./assets/you-win.png");
     let you_lose = Path::new("./assets/you-lose.png");
     let palm_tree = Path::new("./assets/palm-tree.png");
-    
+    let sea_bird = Path::new("./assets/sea-bird.png");   
+    let rock = Path::new("./assets/rock.png");
+    let character = Path::new("./assets/character.png");
+ 
     let mut blood_text = render::BloodText(Texture::from_path(&blood).unwrap());
     let mut you_win_text = render::YouWinText(Texture::from_path(&you_win).unwrap());
     let mut you_lose_text = render::YouLoseText(Texture::from_path(&you_lose).unwrap());
     let mut palm_tree = render::PalmTree(Texture::from_path(&palm_tree).unwrap());
+    let mut sea_bird = render::SeaBird(Texture::from_path(&sea_bird).unwrap());
+    let mut rock = render::Rock(Texture::from_path(&rock).unwrap());
+    let mut character = render::Character(Texture::from_path(&character).unwrap());
 
     let blood_text_guard = CurrentGuard::new(&mut blood_text);
     let you_win_text_guard = CurrentGuard::new(&mut you_win_text);
     let you_lose_text_guard = CurrentGuard::new(&mut you_lose_text);
     let palm_tree_guard = CurrentGuard::new(&mut palm_tree);
+    let sea_bird_guard = CurrentGuard::new(&mut sea_bird);
+    let rock_guard = CurrentGuard::new(&mut rock);
+    let character_guard = CurrentGuard::new(&mut character);
 
     // Restart level if not quiting.
     while !piston::should_close() {
@@ -57,6 +66,9 @@ fn load_assets(f: ||) {
     drop(you_win_text_guard);
     drop(you_lose_text_guard);
     drop(palm_tree_guard);
+    drop(sea_bird_guard);
+    drop(rock_guard);
+    drop(character_guard);
 }
 
 /// Initialize current objects used as application structure
@@ -68,11 +80,7 @@ fn setup() {
         arrow_phases: Vec::new(),
     };
     let mut moving_arrows: Vec<stream::MovingArrow> = Vec::new();    
-    let mut player = player::Player {
-            pos: settings::player::START_POS,
-            vel: settings::player::START_VEL,
-            key_state: player::KeyState::empty(),
-        };
+    let mut player = player::Player::new(settings::player::START_POS);
     let mut rocks = rocks::Rocks { rocks: Vec::new() };
     let mut selected_arrow = stream::SelectedArrow(None);
     let mut game_state = game::GameState::Play;
@@ -130,8 +138,12 @@ pub fn current_blood() -> Current<blood::Blood> { Current }
 pub fn current_palm_tree() -> Current<render::PalmTree> { Current }
 pub fn current_palm_trees() -> Current<palm_trees::PalmTrees> { Current }
 pub fn current_sea_birds() -> Current<sea_birds::SeaBirds> { Current }
+pub fn current_sea_bird() -> Current<render::SeaBird> { Current }
+pub fn current_rock() -> Current<render::Rock> { Current }
+pub fn current_character() -> Current<render::Character> { Current }
 
 fn start() {
+    settings::stream::load();
     stream::refresh_moving_arrows();
     settings::rocks::load();
     settings::palm_trees::load();
@@ -168,23 +180,34 @@ fn start() {
 
         e.mouse_cursor(|x, y| {
             cursor = [x, y];
-            stream::edit_selected_arrow(cursor);
+            if settings::EDIT {
+                stream::edit_selected_arrow(cursor);
+            }
         });
         e.press(|button| {
-            if button == settings::stream::ADD_ARROW_BUTTON {
-                stream::add_arrow(cursor);
-                stream::refresh_moving_arrows();
-            }
-            if button == settings::utils::PRINT_CURSOR_POS {
-                println!("{}, {},", cursor[0], cursor[1]);
-            }
-            if button == settings::utils::PRINT_PLAYER_POS {
-                let pos = current_player().pos;
-                println!("{}, {},", pos[0], pos[1]);
-            }
-
-            if button == settings::utils::PRINT_HAS_WON {
-                println!("{}", game::won());
+            if settings::EDIT {
+                if button == settings::stream::ADD_ARROW_BUTTON {
+                    stream::add_arrow(cursor);
+                    stream::refresh_moving_arrows();
+                }
+                if button == settings::utils::PRINT_CURSOR_POS {
+                    println!("{}, {},", cursor[0], cursor[1]);
+                }
+                if button == settings::utils::PRINT_PLAYER_POS {
+                    let pos = current_player().pos;
+                    println!("{}, {},", pos[0], pos[1]);
+                }
+                if button == settings::utils::PRINT_STREAM {
+                    println!("Stream:");
+                    for (arrow, phase) in current_stream().arrows.iter().zip(
+                        current_stream().arrow_phases.iter()) {
+                        println!("{}, {}, {}, {}, {},", arrow.pos[0], arrow.pos[1],
+                            arrow.dir[0], arrow.dir[1], *phase);
+                    }
+                }
+                if button == settings::utils::PRINT_HAS_WON {
+                    println!("{}", game::won());
+                }
             }
             if button == settings::player::MOVE_LEFT_BUTTON {
                 current_player().key_state.insert(player::LEFT);
@@ -236,13 +259,7 @@ fn start() {
 
 /*
 
-- Add character texture
-- Add sea birds
-- See how the sea looks with ellipses instead of lines
-- Add rock texture
-- Make it possible to toggle on/off the arrows
-
-I want the player to feel how it is to struggle with the current.
+- Make player turn red when bitten 
 
 */
 
