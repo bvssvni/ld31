@@ -3,6 +3,10 @@ ld31
 
 My entry for Ludum Dare 31
 
+| Binaries |
+|----------|
+| [OSX](https://github.com/bvssvni/ld31/raw/master/bin/seabirdsbreakfast-osx.zip) |
+
 ![screenshot](./screenshot.png)
 
 To compile you need to install [Rust](http://www.rust-lang.org/)
