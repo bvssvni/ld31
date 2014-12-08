@@ -221,7 +221,9 @@ fn start() {
                 render::render(&c, g);
             });
 
-            piston::set_title(piston::fps_tick().to_string());
+            piston::set_title(
+                format!("Sea Birds' Breakfast ({})", piston::fps_tick())
+            );
         });
         e.update(|args| {
             let dt = args.dt;
