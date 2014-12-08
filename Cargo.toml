@@ -17,3 +17,7 @@ brach = "gitdev"
 
 git = "https://github.com/AngryLawyer/rust-sdl2"
 
+[features]
+
+ship = []
+

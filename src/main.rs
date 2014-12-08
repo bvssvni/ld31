@@ -71,25 +71,37 @@ impl LoseMusic {
     }
 }
 
+#[cfg(feature = "ship")]
+pub fn root() -> Path {
+    std::os::self_exe_path().unwrap()
+}
+
+#[cfg(not(feature = "ship"))]
+pub fn root() -> Path {
+    Path::new("./")
+}
+
 fn load_assets(f: ||) {
     use opengl_graphics::Texture;
 
     init_audio();
 
+    let root = root();
+
     // Load music file. 
-    let background_music = Path::new("./assets/background.wav");
-    let win_music = Path::new("./assets/win.wav");
-    let lose_music = Path::new("./assets/lose.wav");
+    let background_music = root.join(Path::new("assets/background.wav"));
+    let win_music = root.join(Path::new("./assets/win.wav"));
+    let lose_music = root.join(Path::new("./assets/lose.wav"));
     
     let background_music = mix::Music::from_file(&background_music).unwrap();
 
-    let blood = Path::new("./assets/blood.png");
-    let you_win = Path::new("./assets/you-win.png");
-    let you_lose = Path::new("./assets/you-lose.png");
-    let palm_tree = Path::new("./assets/palm-tree.png");
-    let sea_bird = Path::new("./assets/sea-bird.png");   
-    let rock = Path::new("./assets/rock.png");
-    let character = Path::new("./assets/character.png");
+    let blood = root.join(Path::new("./assets/blood.png"));
+    let you_win = root.join(Path::new("./assets/you-win.png"));
+    let you_lose = root.join(Path::new("./assets/you-lose.png"));
+    let palm_tree = root.join(Path::new("./assets/palm-tree.png"));
+    let sea_bird = root.join(Path::new("./assets/sea-bird.png"));
+    let rock = root.join(Path::new("./assets/rock.png"));
+    let character = root.join(Path::new("./assets/character.png"));
  
     let mut win_music = WinMusic(mix::Music::from_file(&win_music).unwrap());
     let mut lose_music = LoseMusic(mix::Music::from_file(&lose_music).unwrap());
