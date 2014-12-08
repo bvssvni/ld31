@@ -1,4 +1,4 @@
-ld31
+Ludum Dare 31: Sea Birds' Breakfast
 ====
 
 My entry for Ludum Dare 31
