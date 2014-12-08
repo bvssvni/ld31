@@ -3,6 +3,8 @@ name = "seabirdsbreakfast"
 version = "0.0.1"
 dependencies = [
  "piston 0.0.0 (git+https://github.com/pistondevelopers/piston)",
+ "sdl2 0.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sdl2_mixer 0.0.3 (git+https://github.com/andelf/rust-sdl2_mixer)",
 ]
 
 [[package]]
@@ -310,6 +312,19 @@ source = "git+https://github.com/netvl/rust-xml#2d9df3267aeaa4d442e1e19a4dfed733
 name = "sdl2"
 version = "0.0.7"
 source = "git+https://github.com/AngryLawyer/rust-sdl2#81daa9f8eed74e154f34597cde2d4ed9041f0ac4"
+
+[[package]]
+name = "sdl2"
+version = "0.0.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "sdl2_mixer"
+version = "0.0.3"
+source = "git+https://github.com/andelf/rust-sdl2_mixer#256bf8a45b474b1abb7522f65f8e85c89a87ca53"
+dependencies = [
+ "sdl2 0.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "sdl2_window"

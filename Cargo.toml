@@ -8,3 +8,11 @@ authors = ["Sven Nilsen <bvssvni@gmail.com>"]
 
 git = "https://github.com/pistondevelopers/piston"
 
+[dependencies.sdl2_mixer]
+
+git = "https://github.com/andelf/rust-sdl2_mixer"
+
+[dependencies]
+
+sdl2 = "*"
+

@@ -18,6 +18,8 @@ pub fn should_update() -> bool {
 pub fn update_game_state() {
     use current_game_state;
     use current_blood_bar;
+    use current_win_music;
+    use current_lose_music;
     use blood_bar::BloodBar;
 
     let state = &mut *current_game_state();
@@ -26,8 +28,12 @@ pub fn update_game_state() {
     *state = match *state {
         GameState::Play => {
             if won() {
+                current_win_music().play();
+
                 GameState::Win
             } else if blood_bar == 0.0 {
+                current_lose_music().play();
+
                 GameState::Lose
             } else {
                 GameState::Play

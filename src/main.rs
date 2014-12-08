@@ -1,8 +1,11 @@
 extern crate piston;
 extern crate opengl_graphics;
 extern crate serialize;
+extern crate sdl2_mixer;
+extern crate sdl2;
 
 use piston::current::{ Current, CurrentGuard };
+use sdl2_mixer as mix;
 
 mod blood;
 mod blood_bar;
@@ -30,8 +33,55 @@ fn main() {
     );
 }
 
+fn init_audio() {
+    sdl2::init(sdl2::INIT_AUDIO | sdl2::INIT_TIMER);
+    // Load dynamic libraries.
+    mix::init(
+          mix::INIT_MP3 
+        | mix::INIT_FLAC 
+        | mix::INIT_MOD 
+        | mix::INIT_FLUIDSYNTH
+        | mix::INIT_MODPLUG
+        | mix::INIT_OGG
+    );
+    mix::open_audio(
+        mix::DEFAULT_FREQUENCY,
+        mix::DEFAULT_FORMAT,
+        mix::DEFAULT_CHANNELS,
+        1024
+    ).unwrap();
+    mix::allocate_channels(mix::DEFAULT_CHANNELS); 
+}
+
+pub struct WinMusic(pub mix::Music);
+
+impl WinMusic {
+    pub fn play(&mut self) {
+        let &WinMusic(ref mut music) = self;
+        music.play(0).unwrap();
+    }
+}
+
+pub struct LoseMusic(pub mix::Music);
+
+impl LoseMusic {
+    pub fn play(&mut self) {
+        let &LoseMusic(ref mut music) = self;
+        music.play(0).unwrap();
+    }
+}
+
 fn load_assets(f: ||) {
     use opengl_graphics::Texture;
+
+    init_audio();
+
+    // Load music file. 
+    let background_music = Path::new("./assets/background.wav");
+    let win_music = Path::new("./assets/win.wav");
+    let lose_music = Path::new("./assets/lose.wav");
+    
+    let background_music = mix::Music::from_file(&background_music).unwrap();
 
     let blood = Path::new("./assets/blood.png");
     let you_win = Path::new("./assets/you-win.png");
@@ -41,6 +91,8 @@ fn load_assets(f: ||) {
     let rock = Path::new("./assets/rock.png");
     let character = Path::new("./assets/character.png");
  
+    let mut win_music = WinMusic(mix::Music::from_file(&win_music).unwrap());
+    let mut lose_music = LoseMusic(mix::Music::from_file(&lose_music).unwrap());
     let mut blood_text = render::BloodText(Texture::from_path(&blood).unwrap());
     let mut you_win_text = render::YouWinText(Texture::from_path(&you_win).unwrap());
     let mut you_lose_text = render::YouLoseText(Texture::from_path(&you_lose).unwrap());
@@ -56,9 +108,14 @@ fn load_assets(f: ||) {
     let sea_bird_guard = CurrentGuard::new(&mut sea_bird);
     let rock_guard = CurrentGuard::new(&mut rock);
     let character_guard = CurrentGuard::new(&mut character);
+    let win_music_guard = CurrentGuard::new(&mut win_music);
+    let lose_music_guard = CurrentGuard::new(&mut lose_music);
 
     // Restart level if not quiting.
     while !piston::should_close() {
+        // Loop infinite times. 
+        background_music.play(-1).unwrap();
+        
         f();
     }
 
@@ -69,6 +126,8 @@ fn load_assets(f: ||) {
     drop(sea_bird_guard);
     drop(rock_guard);
     drop(character_guard);
+    drop(win_music_guard);
+    drop(lose_music_guard);
 }
 
 /// Initialize current objects used as application structure
@@ -141,6 +200,8 @@ pub fn current_sea_birds() -> Current<sea_birds::SeaBirds> { Current }
 pub fn current_sea_bird() -> Current<render::SeaBird> { Current }
 pub fn current_rock() -> Current<render::Rock> { Current }
 pub fn current_character() -> Current<render::Character> { Current }
+pub fn current_win_music() -> Current<WinMusic> { Current }
+pub fn current_lose_music() -> Current<LoseMusic> { Current }
 
 fn start() {
     settings::stream::load();
@@ -258,8 +319,6 @@ fn start() {
 }
 
 /*
-
-- Make player turn red when bitten 
 
 */
 
