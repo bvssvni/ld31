@@ -13,7 +13,23 @@ Open up the Terminal window, navigate to the project folder and type:
 cargo run
 ```
 
-### Instructions
+## Instructions
 
 * Use left/right/up/down to swim
-* Drag & drop with mouse to insert new current streams
+
+### Edit streams (modify the game)
+
+1. Change `EDIT` in "src/settings.rs" to `true`
+2. Drag & drop with mouse to insert new current streams
+3. Hit "S" on the keyboard to print current streams
+4. Modify "assets/stream.txt" (no comma behind last number)
+
+### Ship a binary
+
+```
+cargo build --features ship
+```
+
+1. Copy the "/target/seabirdsbreakfast" into a new folder
+2. Copy the "assets" folder to the same folder
+3. Zip the folder
