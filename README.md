@@ -3,6 +3,11 @@ Ludum Dare 31: Sea Birds' Breakfast
 
 My entry for Ludum Dare 31
 
+A sequel of [Sea Snake Escape](https://github.com/bvssvni/rust-snake).
+
+This game is about reaching land by swimming against the current while you are bleeding from the sea snake wounds.
+Watch out for those sea birds!
+
 | Binaries |
 |----------|
 | [OSX](https://github.com/bvssvni/ld31/raw/master/bin/seabirdsbreakfast-osx.zip) |
