@@ -37,6 +37,11 @@ pub struct Stream {
 }
 
 impl Stream {
+    pub fn add_arrow(&mut self, arrow: Arrow, phase: f64) {
+        self.arrows.push(arrow);
+        self.arrow_phases.push(phase);
+    }
+    
     /// Computes stream at position using weighted average
     pub fn at(&self, pos: [f64, ..2]) -> [f64, ..2] {
         use piston::vecmath::vec2_add as add;
@@ -75,11 +80,13 @@ pub fn add_arrow(pos: [f64, ..2]) {
     let stream = &mut *current_stream();
     let selected_arrow = &mut *current_selected_arrow();
 
-    stream.arrows.push(Arrow {
-        pos: pos,
-        dir: [0.0, ..2],
-    });
-    stream.arrow_phases.push(random::<f64>() * Radians::_360());
+    stream.add_arrow(
+        Arrow {
+            pos: pos,
+            dir: [0.0, ..2],
+        },
+        random::<f64>() * Radians::_360()
+    );
 
     let id = stream.arrows.len() - 1;
     *selected_arrow = SelectedArrow(Some(id));

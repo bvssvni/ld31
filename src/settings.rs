@@ -110,8 +110,7 @@ pub mod stream {
                     None => { break; }
                     Some(x) => from_str(x.trim()).unwrap()
                 };
-            stream.arrows.push(Arrow { pos: [x, y], dir: [dx, dy] });            
-            stream.arrow_phases.push(phase);
+            stream.add_arrow(Arrow { pos: [x, y], dir: [dx, dy] }, phase);            
         }
     }
 }
