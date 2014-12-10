@@ -19,7 +19,7 @@ mod stream;
 mod sea_birds;
 
 fn main() {
-    let opengl = piston::shader_version::opengl::OpenGL::OpenGL_3_2;
+    let opengl = piston::shader_version::OpenGL::_3_2;
     piston::start(
         opengl,
         piston::WindowSettings {
