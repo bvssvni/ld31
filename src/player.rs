@@ -10,6 +10,25 @@ bitflags! {
     }
 }
 
+impl KeyState {
+    pub fn acceleration(&self, d: f64) -> [f64, ..2] {
+        let mut acc = [0.0, ..2];
+        if self.contains(LEFT) {
+            acc[0] -= d;
+        }
+        if self.contains(RIGHT) {
+            acc[0] += d;
+        }
+        if self.contains(DOWN) {
+            acc[1] += d;
+        }
+        if self.contains(UP) {
+            acc[1] -= d;
+        }
+        acc
+    }
+}
+
 pub enum State {
     Bitten(f64),
     Normal,
@@ -78,19 +97,7 @@ pub fn update_player(dt: f64) {
             }
         };
 
-    let mut acc: [f64, ..2] = [0.0, 0.0];
-    if player.key_state.contains(LEFT) {
-        acc[0] -= ACC;
-    }
-    if player.key_state.contains(RIGHT) {
-        acc[0] += ACC;
-    }
-    if player.key_state.contains(DOWN) {
-        acc[1] += ACC;
-    }
-    if player.key_state.contains(UP) {
-        acc[1] -= ACC;
-    }
+    let acc = player.key_state.acceleration(ACC);
 
     let next_vel = add(player.vel, scale(acc, dt));
     let next_vel_square_len = square_len(next_vel);
