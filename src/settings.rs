@@ -1,7 +1,7 @@
 use piston::graphics::color::hex;
 
 pub const BEACH_ELLIPSE: [f64, ..4] = [500.0, -500.0, 1000.0, 1500.0];
-pub const WATER_FRICTION: f64 = 0.00002;
+pub const WATER_FRICTION: f64 = 0.0004;
 pub const EDIT: bool = false;
 
 pub fn background_color() -> [f32, ..4] {
@@ -62,7 +62,7 @@ pub mod player {
     pub const MOVE_DOWN_BUTTON: Button = Button::Keyboard(Key::Down);
     pub const MOVE_UP_BUTTON: Button = Button::Keyboard(Key::Up);
 
-    pub const ACC: f64 = 1000.0;
+    pub const ACC: f64 = 50.0;
 }
 
 pub mod stream {

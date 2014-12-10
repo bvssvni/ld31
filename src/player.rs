@@ -99,14 +99,17 @@ pub fn update_player(dt: f64) {
 
     let acc = player.key_state.acceleration(ACC);
 
+    let drag = (-square_len(player.vel) * friction).exp();
+    let vel = scale(player.vel, drag);
+
     let next_vel = add(player.vel, scale(acc, dt));
-    let next_vel_square_len = square_len(next_vel);
-    let drag = 1.0 / (next_vel_square_len * friction).exp();
+    let drag = (-square_len(next_vel) * friction).exp();
     let next_vel = scale(next_vel, drag);
 
-    let avg_vel = scale(add(player.vel, next_vel), 0.5);
+    player.vel = scale(add(vel, next_vel), 0.5);
+
     let dir = stream.at(player.pos);
-    let next_pos = add(player.pos, add(scale(dir, dt), scale(avg_vel, dt)));
+    let next_pos = add(player.pos, add(scale(dir, dt), scale(player.vel, dt)));
 
     let mut hits_rock = false;
     let rock_radius = ::settings::rocks::RADIUS;
