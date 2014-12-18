@@ -66,10 +66,9 @@ pub mod player {
 }
 
 pub mod stream {
-    use piston::input::{ Button };
-    use piston::input::mouse;
+    use piston::input::{ Button, MouseButton };
     
-    pub const ADD_ARROW_BUTTON: Button = Button::Mouse(mouse::Button::Left);
+    pub const ADD_ARROW_BUTTON: Button = Button::Mouse(MouseButton::Left);
     pub const STRENGTH: [f64, ..2] = [10.0, 50.0];
     pub const ARROW_COLOR: [f32, ..4] = [0.0, 0.0, 0.7, 0.8];
     pub const ARROW_SIZE: f64 = 5.0;

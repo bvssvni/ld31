@@ -1,8 +1,10 @@
 //! Describes the sea current
 
 /// The current selected arrow.
+#[deriving(Copy)]
 pub struct SelectedArrow(pub Option<uint>);
 
+#[deriving(Copy)]
 pub struct Arrow {
     pub pos: [f64, ..2],
     pub dir: [f64, ..2],

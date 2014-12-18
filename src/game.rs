@@ -1,5 +1,5 @@
 
-#[deriving(PartialEq, Eq)]
+#[deriving(Copy, PartialEq, Eq)]
 pub enum GameState {
     Play,
     Lose,
