@@ -83,7 +83,7 @@ pub mod stream {
         use current_stream;
         use stream::Arrow;
 
-        let stream = &mut *current_stream();
+        let stream = unsafe { &mut *current_stream() };
 
         // Just split by comma.
         let data = include_str!("../assets/stream.txt");
@@ -122,7 +122,7 @@ pub mod rocks {
         use current_rocks;
         use rocks::Rock;
 
-        let rocks = &mut *current_rocks();
+        let rocks = unsafe { &mut *current_rocks() };
 
         // Just split by comma.
         let data = include_str!("../assets/rocks.txt");
@@ -182,7 +182,7 @@ pub mod palm_trees {
     pub fn load() {
         use current_palm_trees;
 
-        let palm_trees = &mut *current_palm_trees();
+        let palm_trees = unsafe { &mut *current_palm_trees() };
 
         // Just split by comma.
         let data = include_str!("../assets/palm_trees.txt");
@@ -219,7 +219,7 @@ pub mod sea_birds {
         use current_sea_birds;
         use sea_birds::SeaBird;
 
-        let sea_birds = &mut *current_sea_birds();
+        let sea_birds = unsafe { &mut *current_sea_birds() };
 
         // Just split by comma.
         let data = include_str!("../assets/sea_birds.txt");

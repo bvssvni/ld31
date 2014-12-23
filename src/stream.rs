@@ -79,8 +79,8 @@ pub fn add_arrow(pos: [f64, ..2]) {
     use std::rand::random;
     use piston::vecmath::consts::Radians;
 
-    let stream = &mut *current_stream();
-    let selected_arrow = &mut *current_selected_arrow();
+    let stream = unsafe { &mut *current_stream() };
+    let selected_arrow = unsafe { &mut *current_selected_arrow() };
 
     stream.add_arrow(
         Arrow {
@@ -101,8 +101,8 @@ pub fn edit_selected_arrow(pos: [f64, ..2]) {
     use piston::vecmath::vec2_scale as scale;
     use settings::stream::SPEEDUP;
 
-    let stream = &mut *current_stream();
-    let &SelectedArrow(selected_arrow) = &mut *current_selected_arrow();
+    let stream = unsafe { &mut *current_stream() };
+    let &SelectedArrow(selected_arrow) = unsafe { &mut *current_selected_arrow() };
     let id = match selected_arrow {
         None => { return; }
         Some(x) => x
@@ -113,7 +113,7 @@ pub fn edit_selected_arrow(pos: [f64, ..2]) {
 pub fn deselect_arrow() {
     use current_selected_arrow;
 
-    *current_selected_arrow() = SelectedArrow(None);
+    *unsafe { current_selected_arrow() } = SelectedArrow(None);
 }
 
 pub fn refresh_moving_arrows() {
@@ -121,8 +121,8 @@ pub fn refresh_moving_arrows() {
     use current_moving_arrows;
     use settings::stream::SAMPLE_SIZE;
 
-    let stream = &mut *current_stream();
-    let moving_arrows = &mut *current_moving_arrows();
+    let stream = unsafe { &mut *current_stream() };
+    let moving_arrows = unsafe { &mut *current_moving_arrows() };
     
     moving_arrows.clear();
     let [x, y, _, _] = stream.rect;
@@ -149,7 +149,7 @@ pub fn update_stream(dt: f64) {
     use piston::vecmath::consts::Radians;
    
     let shift = dt * PHASE_VEL * Radians::_360();
-    let stream = &mut *current_stream();
+    let stream = unsafe { &mut *current_stream() };
     for arrow_phase in stream.arrow_phases.iter_mut() {
         *arrow_phase += shift;
     }
@@ -163,8 +163,8 @@ pub fn update_moving_arrows(dt: f64) {
     use piston::vecmath::vec2_len as len;
     use settings::stream::{ MOVING_ARROW_TIME_SPAN, SPEEDUP };
 
-    let stream = &mut *current_stream();
-    let moving_arrows = &mut *current_moving_arrows();
+    let stream = unsafe { &mut *current_stream() };
+    let moving_arrows = unsafe { &mut *current_moving_arrows() };
     for moving_arrow in moving_arrows.iter_mut() {
         let arrow = moving_arrow.arrow;
         let diff = scale(arrow.dir, dt * SPEEDUP);

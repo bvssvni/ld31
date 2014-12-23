@@ -99,8 +99,8 @@ pub fn update_sea_birds<E: GenericEvent>(e: &E) {
     use blood_bar;
     use player;
 
-    let sea_birds = &mut *current_sea_birds();
-    let player = &mut *current_player();
+    let sea_birds = unsafe { &mut *current_sea_birds() };
+    let player = unsafe { &mut *current_player() };
 
     let _360: f64 = Radians::_360();
     for sea_bird in sea_birds.birds.iter_mut() {

@@ -30,7 +30,7 @@ pub fn stream_arrows(c: &Context, g: &mut Gl) {
     use piston::graphics;
     use settings::stream::{ ARROW_COLOR, ARROW_SIZE, SPEEDUP };
 
-    let stream = &mut *current_stream();
+    let stream = unsafe { &mut *current_stream() };
     let line = graphics::Line::new(ARROW_COLOR, 2.0);
     for arrow in stream.arrows.iter() {
         line.draw_arrow(arrow.line(SPEEDUP), ARROW_SIZE, c, g);
@@ -46,7 +46,7 @@ pub fn moving_arrows(c: &Context, g: &mut Gl) {
         SPEEDUP,
     };
 
-    let moving_arrows = &mut *current_moving_arrows();
+    let moving_arrows = unsafe { &mut *current_moving_arrows() };
     let mut line = Line::new(MOVING_ARROW_COLOR, 1.0);
     for moving_arrow in moving_arrows.iter() {
         let [red, green, blue, _] = line.color;
@@ -76,8 +76,8 @@ pub fn player(c: &Context, g: &mut Gl) {
         FRAMES, BITTEN_COLOR, BITTEN_FADE_OUT_SECONDS,
     };
 
-    let &Character(ref texture ) = &mut *current_character();
-    let player = &mut *current_player();
+    let &Character(ref texture ) = unsafe { &mut *current_character() };
+    let player = unsafe { &mut *current_player() };
     let [x, y] = player.pos;
     // Rectangle::new(TEST_COLOR).draw(centered_square(x, y, radius), c, g);
     let frame = FRAMES[player.frame];
@@ -103,10 +103,10 @@ pub fn rocks(c: &Context, g: &mut Gl) {
     use piston::graphics::RelativeTransform;
     use piston::graphics::ImageSize;
 
-    let &Rock(ref texture) = &mut *current_rock();
+    let &Rock(ref texture) = unsafe { &mut *current_rock() };
     let (w, h) = texture.get_size();
     let (w, h) = (w as f64, h as f64);
-    let rocks = &mut *current_rocks();
+    let rocks = unsafe { &mut *current_rocks() };
     // let ellipse = Ellipse::new(TEST_COLOR);
     for rock in rocks.rocks.iter() {
         let [x, y] = rock.pos;
@@ -129,8 +129,8 @@ pub fn blood_bar(c: &Context, g: &mut Gl) {
     };
     use blood_bar::BloodBar;
 
-    let &BloodText(ref blood_text) = &mut *current_blood_text();
-    let &BloodBar(bar) = &mut *current_blood_bar();
+    let &BloodText(ref blood_text) = unsafe { &mut *current_blood_text() };
+    let &BloodBar(bar) = unsafe { &mut *current_blood_bar() };
     
     let pos = TEXT_POS;
     let zoom = ZOOM;
@@ -157,10 +157,10 @@ pub fn you_win(c: &Context, g: &mut Gl) {
     use piston::graphics::RelativeTransform;
     use settings::you_win::{ POS, ZOOM };
 
-    let game_state = *current_game_state();
+    let game_state = unsafe { *current_game_state() };
     if game_state != GameState::Win { return; }
 
-    let &YouWinText(ref texture) = &mut *current_you_win_text();
+    let &YouWinText(ref texture) = unsafe { &mut *current_you_win_text() };
     image(texture, &c.trans(POS[0], POS[1]).zoom(ZOOM), g);
 }
 
@@ -172,10 +172,10 @@ pub fn you_lose(c: &Context, g: &mut Gl) {
     use piston::graphics::RelativeTransform;
     use settings::you_lose::{ POS, ZOOM };
 
-    let game_state = *current_game_state();
+    let game_state = unsafe { *current_game_state() };
     if game_state != GameState::Lose { return; }
 
-    let &YouLoseText(ref texture) = &mut *current_you_lose_text();
+    let &YouLoseText(ref texture) = unsafe { &mut *current_you_lose_text() };
     image(texture, &c.trans(POS[0], POS[1]).zoom(ZOOM), g);
 }
 
@@ -185,7 +185,7 @@ pub fn blood(c: &Context, g: &mut Gl) {
     use piston::graphics::ellipse::circle;
     use settings::blood::{ test_color, RADIUS, SPAN, START_RADIUS };
 
-    let blood = &mut *current_blood();
+    let blood = unsafe { &mut *current_blood() };
 
     let [red, green, blue, _] = test_color();
     for blood_drop in blood.blood_drops.iter().filter(|e| !e.dead) {
@@ -203,8 +203,8 @@ pub fn palm_tree(c: &Context, g: &mut Gl) {
     use piston::graphics::image;
     use piston::graphics::RelativeTransform;
 
-    let &PalmTree(ref texture) = &mut *current_palm_tree();
-    let palm_trees = &mut *current_palm_trees();
+    let &PalmTree(ref texture) = unsafe { &mut *current_palm_tree() };
+    let palm_trees = unsafe { &mut *current_palm_trees() };
 
     for pos in palm_trees.palms.iter() {
         image(texture, &c.trans(pos[0], pos[1]), g);
@@ -217,8 +217,8 @@ pub fn sea_birds(c: &Context, g: &mut Gl) {
     use piston::graphics::image;
     use piston::graphics::RelativeTransform;
 
-    let sea_birds = &mut *current_sea_birds();
-    let &SeaBird(ref texture) = &mut *current_sea_bird();
+    let sea_birds = unsafe { &mut *current_sea_birds() };
+    let &SeaBird(ref texture) = unsafe { &mut *current_sea_bird() };
 
     // let rect = Rectangle::new(TEST_COLOR);
     for sea_bird in sea_birds.birds.iter() {

@@ -9,7 +9,7 @@ pub enum GameState {
 pub fn should_update() -> bool {
     use current_game_state;
     
-    match *current_game_state() {
+    match unsafe { *current_game_state() } {
         GameState::Play => true,
         _ => false
     }
@@ -22,17 +22,17 @@ pub fn update_game_state() {
     use current_lose_music;
     use blood_bar::BloodBar;
 
-    let state = &mut *current_game_state();
-    let &BloodBar(blood_bar) = &mut *current_blood_bar();
+    let state = unsafe { &mut *current_game_state() };
+    let &BloodBar(blood_bar) = unsafe { &mut *current_blood_bar() };
 
     *state = match *state {
         GameState::Play => {
             if won() {
-                current_win_music().play();
+                unsafe { current_win_music() }.play();
 
                 GameState::Win
             } else if blood_bar == 0.0 {
-                current_lose_music().play();
+                unsafe { current_lose_music() }.play();
 
                 GameState::Lose
             } else {
@@ -47,7 +47,7 @@ pub fn won() -> bool {
     use current_player;
     use settings::BEACH_ELLIPSE;
 
-    let player = &mut *current_player();
+    let player = unsafe { &mut *current_player() };
     let [x, y] = player.pos;
     let beach = BEACH_ELLIPSE;
     let rw = 0.5 * beach[2];

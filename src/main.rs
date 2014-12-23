@@ -195,25 +195,25 @@ fn sea_rect() -> [f64, ..4] {
     [0.0, 0.0, w as f64, h as f64]
 }
 
-pub fn current_stream() -> Current<stream::Stream> { Current }
-pub fn current_moving_arrows() -> Current<Vec<stream::MovingArrow>> { Current }
-pub fn current_player() -> Current<player::Player> { Current }
-pub fn current_rocks() -> Current<rocks::Rocks> { Current }
-pub fn current_selected_arrow() -> Current<stream::SelectedArrow> { Current }
-pub fn current_game_state() -> Current<game::GameState> { Current }
-pub fn current_blood_text() -> Current<render::BloodText> { Current }
-pub fn current_blood_bar() -> Current<blood_bar::BloodBar> { Current }
-pub fn current_you_win_text() -> Current<render::YouWinText> { Current }
-pub fn current_you_lose_text() -> Current<render::YouLoseText> { Current }
-pub fn current_blood() -> Current<blood::Blood> { Current }
-pub fn current_palm_tree() -> Current<render::PalmTree> { Current }
-pub fn current_palm_trees() -> Current<palm_trees::PalmTrees> { Current }
-pub fn current_sea_birds() -> Current<sea_birds::SeaBirds> { Current }
-pub fn current_sea_bird() -> Current<render::SeaBird> { Current }
-pub fn current_rock() -> Current<render::Rock> { Current }
-pub fn current_character() -> Current<render::Character> { Current }
-pub fn current_win_music() -> Current<WinMusic> { Current }
-pub fn current_lose_music() -> Current<LoseMusic> { Current }
+pub unsafe fn current_stream() -> Current<stream::Stream> { Current::new() }
+pub unsafe fn current_moving_arrows() -> Current<Vec<stream::MovingArrow>> { Current::new() }
+pub unsafe fn current_player() -> Current<player::Player> { Current::new() }
+pub unsafe fn current_rocks() -> Current<rocks::Rocks> { Current::new() }
+pub unsafe fn current_selected_arrow() -> Current<stream::SelectedArrow> { Current::new() }
+pub unsafe fn current_game_state() -> Current<game::GameState> { Current::new() }
+pub unsafe fn current_blood_text() -> Current<render::BloodText> { Current::new() }
+pub unsafe fn current_blood_bar() -> Current<blood_bar::BloodBar> { Current::new() }
+pub unsafe fn current_you_win_text() -> Current<render::YouWinText> { Current::new() }
+pub unsafe fn current_you_lose_text() -> Current<render::YouLoseText> { Current::new() }
+pub unsafe fn current_blood() -> Current<blood::Blood> { Current::new() }
+pub unsafe fn current_palm_tree() -> Current<render::PalmTree> { Current::new() }
+pub unsafe fn current_palm_trees() -> Current<palm_trees::PalmTrees> { Current::new() }
+pub unsafe fn current_sea_birds() -> Current<sea_birds::SeaBirds> { Current::new() }
+pub unsafe fn current_sea_bird() -> Current<render::SeaBird> { Current::new() }
+pub unsafe fn current_rock() -> Current<render::Rock> { Current::new() }
+pub unsafe fn current_character() -> Current<render::Character> { Current::new() }
+pub unsafe fn current_win_music() -> Current<WinMusic> { Current::new() }
+pub unsafe fn current_lose_music() -> Current<LoseMusic> { Current::new() }
 
 fn start() {
     settings::stream::load();
@@ -229,7 +229,9 @@ fn start() {
             ReleaseEvent, RenderEvent, UpdateEvent
         };
         e.render(|_args| {
-            piston::render_2d_opengl(Some(settings::background_color()), |c, g| {
+            piston::render_2d_opengl(
+                unsafe { piston::DANGER::new() },
+                Some(settings::background_color()), |c, g| {
                 render::render(&c, g);
             });
 
@@ -269,13 +271,13 @@ fn start() {
                     println!("{}, {},", cursor[0], cursor[1]);
                 }
                 if button == settings::utils::PRINT_PLAYER_POS {
-                    let pos = current_player().pos;
+                    let pos = unsafe { current_player() }.pos;
                     println!("{}, {},", pos[0], pos[1]);
                 }
                 if button == settings::utils::PRINT_STREAM {
                     println!("Stream:");
-                    for (arrow, phase) in current_stream().arrows.iter().zip(
-                        current_stream().arrow_phases.iter()) {
+                    for (arrow, phase) in unsafe { current_stream() }.arrows.iter().zip(
+                        unsafe { current_stream() }.arrow_phases.iter()) {
                         println!("{}, {}, {}, {}, {},", arrow.pos[0], arrow.pos[1],
                             arrow.dir[0], arrow.dir[1], *phase);
                     }
@@ -285,16 +287,16 @@ fn start() {
                 }
             }
             if button == settings::player::MOVE_LEFT_BUTTON {
-                current_player().key_state.insert(player::LEFT);
+                unsafe { current_player() }.key_state.insert(player::LEFT);
             }
             if button == settings::player::MOVE_RIGHT_BUTTON {
-                current_player().key_state.insert(player::RIGHT);
+                unsafe { current_player() }.key_state.insert(player::RIGHT);
             }
             if button == settings::player::MOVE_UP_BUTTON {
-                current_player().key_state.insert(player::UP);
+                unsafe { current_player() }.key_state.insert(player::UP);
             }
             if button == settings::player::MOVE_DOWN_BUTTON {
-                current_player().key_state.insert(player::DOWN);
+                unsafe { current_player() }.key_state.insert(player::DOWN);
             }
         });
         e.release(|button| {
@@ -302,21 +304,21 @@ fn start() {
                 stream::deselect_arrow();
             }
             if button == settings::player::MOVE_LEFT_BUTTON {
-                current_player().key_state.remove(player::LEFT);
+                unsafe { current_player() }.key_state.remove(player::LEFT);
             }
             if button == settings::player::MOVE_RIGHT_BUTTON {
-                current_player().key_state.remove(player::RIGHT);
+                unsafe { current_player() }.key_state.remove(player::RIGHT);
             }
             if button == settings::player::MOVE_UP_BUTTON {
-                current_player().key_state.remove(player::UP);
+                unsafe { current_player() }.key_state.remove(player::UP);
             }
             if button == settings::player::MOVE_DOWN_BUTTON {
-                current_player().key_state.remove(player::DOWN);
+                unsafe { current_player() }.key_state.remove(player::DOWN);
             }
         });
 
         let restart = e.press(|button| {
-            let game_state = *current_game_state();
+            let game_state = unsafe { *current_game_state() };
             let can_restart = match game_state {
                     game::GameState::Win
                   | game::GameState::Lose => true,

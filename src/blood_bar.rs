@@ -5,7 +5,7 @@ pub fn decrease(d: f64) {
     use current_blood_bar;
     use std::num::FloatMath;
 
-    let &BloodBar(ref mut val) = &mut *current_blood_bar();
+    let &BloodBar(ref mut val) = unsafe { &mut *current_blood_bar() };
     *val = (*val - d).max(0.0);
 }
 

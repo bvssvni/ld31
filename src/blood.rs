@@ -19,9 +19,9 @@ pub fn update_blood(dt: f64) {
     use piston::vecmath::vec2_scale as scale;
     use settings::blood::{ DROP_INTERVAL, SPAN };
 
-    let blood = &mut *current_blood();
-    let player = &mut *current_player();
-    let stream = &mut *current_stream();
+    let blood = unsafe { &mut *current_blood() };
+    let player = unsafe { &mut *current_player() };
+    let stream = unsafe { &mut *current_stream() };
 
     let interval = DROP_INTERVAL;
     blood.time_since_last_drop += dt;

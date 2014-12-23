@@ -71,9 +71,9 @@ pub fn update_player(dt: f64) {
 
     let dt = dt * SPEEDUP;
 
-    let stream = &mut *current_stream();
-    let player = &mut *current_player();
-    let rocks = &mut *current_rocks();    
+    let stream = unsafe { &mut *current_stream() };
+    let player = unsafe { &mut *current_player() };
+    let rocks = unsafe { &mut *current_rocks() };    
     let friction = WATER_FRICTION;
 
     player.time_since_last_frame_update += dt;

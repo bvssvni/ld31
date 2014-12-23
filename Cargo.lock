@@ -11,7 +11,7 @@ name = "fps_counter"
 version = "0.0.0"
 source = "git+https://github.com/pistondevelopers/fps_counter#6104c72e4f3d496a0a5fa70a93b95a52826fd77f"
 dependencies = [
- "time 0.1.4 (git+https://github.com/rust-lang/time)",
+ "time 0.1.4 (git+http://github.com/rust-lang/time)",
 ]
 
 [[package]]
@@ -88,7 +88,7 @@ dependencies = [
 [[package]]
 name = "piston"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/piston#3eb024bd433fe43784ae135046c7926a8ec018e3"
+source = "git+https://github.com/pistondevelopers/piston#d8f44b8943c6d45e60c2704a4665d31ddb52428d"
 dependencies = [
  "fps_counter 0.0.0 (git+https://github.com/pistondevelopers/fps_counter)",
  "image 0.2.0-alpha.4 (git+https://github.com/pistondevelopers/image)",
@@ -119,7 +119,7 @@ dependencies = [
 [[package]]
 name = "piston-texture"
 version = "0.0.1"
-source = "git+https://github.com/PistonDevelopers/texture#0380876cec71e384841d5a06ad32cb462c97be20"
+source = "git+https://github.com/pistondevelopers/texture#0380876cec71e384841d5a06ad32cb462c97be20"
 
 [[package]]
 name = "piston2d-drag_controller"
@@ -134,7 +134,7 @@ name = "piston2d-graphics"
 version = "0.0.1"
 source = "git+https://github.com/pistondevelopers/graphics#392274b44ccf40b9c2239c31bc76c34bc874d007"
 dependencies = [
- "piston-texture 0.0.1 (git+https://github.com/PistonDevelopers/texture)",
+ "piston-texture 0.0.1 (git+https://github.com/pistondevelopers/texture)",
  "pistoncore-current 0.0.3 (git+https://github.com/PistonDevelopers/current)",
  "read_color 0.0.1 (git+https://github.com/pistondevelopers/read_color)",
  "vecmath 0.0.1 (git+https://github.com/pistondevelopers/vecmath)",
@@ -148,7 +148,7 @@ dependencies = [
  "freetype-rs 0.0.1 (git+https://github.com/PistonDevelopers/freetype-rs.git)",
  "gl 0.0.2 (git+https://github.com/bjz/gl-rs)",
  "image 0.2.0-alpha.4 (git+https://github.com/pistondevelopers/image)",
- "piston-texture 0.0.1 (git+https://github.com/PistonDevelopers/texture)",
+ "piston-texture 0.0.1 (git+https://github.com/pistondevelopers/texture)",
  "piston2d-graphics 0.0.1 (git+https://github.com/pistondevelopers/graphics)",
  "shader_version 0.0.0 (git+https://github.com/pistondevelopers/shader_version)",
 ]
@@ -165,7 +165,7 @@ dependencies = [
 [[package]]
 name = "pistoncore-current"
 version = "0.0.3"
-source = "git+https://github.com/PistonDevelopers/current#dfcd76b69cb20c6cc7da5ecbf5530f9ad36dbeb3"
+source = "git+https://github.com/PistonDevelopers/current#c3c009d761bc90934a8167f418c7a78faa820ec9"
 
 [[package]]
 name = "pistoncore-event"
@@ -184,7 +184,7 @@ version = "0.0.2"
 source = "git+https://github.com/PistonDevelopers/event_loop#98cd324f4b7448458928763e80db2ed44a26ea6e"
 dependencies = [
  "pistoncore-current 0.0.3 (git+https://github.com/PistonDevelopers/current)",
- "time 0.1.4 (git+https://github.com/rust-lang/time)",
+ "time 0.1.4 (git+http://github.com/rust-lang/time)",
 ]
 
 [[package]]
@@ -198,7 +198,7 @@ dependencies = [
 [[package]]
 name = "pistoncore-sdl2_window"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/sdl2_window#b715a2b7c87d0aa46b3641772357dba874a4df1d"
+source = "git+https://github.com/pistondevelopers/sdl2_window#c484f13b4a7b071c9090d4c8fcfacf8ca529e017"
 dependencies = [
  "gl 0.0.2 (git+https://github.com/bjz/gl-rs)",
  "pistoncore-input 0.0.3 (git+https://github.com/pistondevelopers/input)",
@@ -266,7 +266,7 @@ source = "git+https://github.com/pistondevelopers/shader_version#d06e44721e837d0
 [[package]]
 name = "time"
 version = "0.1.4"
-source = "git+https://github.com/rust-lang/time#11636ff02b44f73dc32cc10edb27af19051291fc"
+source = "git+http://github.com/rust-lang/time#11636ff02b44f73dc32cc10edb27af19051291fc"
 dependencies = [
  "gcc 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)",
