@@ -91,23 +91,23 @@ pub mod stream {
         loop {
             let x: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             let y: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             let dx: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             let dy: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             let phase: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             stream.add_arrow(Arrow { pos: [x, y], dir: [dx, dy] }, phase);            
         }
@@ -130,11 +130,11 @@ pub mod rocks {
         loop {
             let x: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             let y: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             rocks.rocks.push(Rock { pos: [x, y] });            
         }
@@ -190,11 +190,11 @@ pub mod palm_trees {
         loop {
             let x: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             let y: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             palm_trees.palms.push([x, y]);            
         }
@@ -227,11 +227,11 @@ pub mod sea_birds {
         loop {
             let x: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             let y: f64 = match data_split.next() {
                     None => { break; }
-                    Some(x) => from_str(x.trim()).unwrap()
+                    Some(x) => x.trim().parse().unwrap()
                 };
             sea_birds.birds.push(SeaBird::new(
                     [x, y],
