@@ -16,3 +16,7 @@ git = "https://github.com/andelf/rust-sdl2_mixer"
 
 ship = []
 
+[profile.dev]
+
+opt-level = 2
+
