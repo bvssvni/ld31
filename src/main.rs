@@ -230,7 +230,6 @@ fn start() {
         };
         e.render(|_args| {
             piston::render_2d_opengl(
-                unsafe { piston::DANGER::new() },
                 Some(settings::background_color()), |c, g| {
                 render::render(&c, g);
             });

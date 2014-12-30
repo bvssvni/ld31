@@ -10,7 +10,9 @@ git = "https://github.com/pistondevelopers/piston"
 
 [dependencies.sdl2_mixer]
 
-git = "https://github.com/andelf/rust-sdl2_mixer"
+git = "https://github.com/bvssvni/rust-sdl2_mixer"
+branch = "gitdev"
+#git = "https://github.com/andelf/rust-sdl2_mixer"
 
 [features]
 
