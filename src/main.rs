@@ -1,3 +1,5 @@
+#![feature(default_type_params)]
+
 extern crate piston;
 extern crate opengl_graphics;
 extern crate serialize;
@@ -191,7 +193,7 @@ fn setup() {
 fn sea_rect() -> [f64, ..4] {
     use piston::current::Get;
 
-    let piston::window::DrawSize([w, h]) = unsafe { piston::current_window().get() };
+    let piston::window::DrawSize([w, h]) = piston::current_window().get();
     [0.0, 0.0, w as f64, h as f64]
 }
 
@@ -228,6 +230,7 @@ fn start() {
             MouseCursorEvent, PressEvent, 
             ReleaseEvent, RenderEvent, UpdateEvent
         };
+        let e: piston::event::Event<piston::input::Input> = e;
         e.render(|_args| {
             piston::render_2d_opengl(
                 Some(settings::background_color()), |c, g| {
