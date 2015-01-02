@@ -71,6 +71,17 @@ impl Stream {
         let [_, _, w, h] = self.rect;
         [(w / sample_size) as u32, (h / sample_size) as u32]
     }
+
+    pub fn update(&mut self, dt: f64) {
+        use settings::stream::PHASE_VEL;
+        use piston::vecmath::consts::Radians;
+       
+        let shift = dt * PHASE_VEL * Radians::_360();
+        for arrow_phase in self.arrow_phases.iter_mut() {
+            *arrow_phase += shift;
+        }
+    }
+
 }
 
 pub fn add_arrow(pos: [f64, ..2]) {
@@ -145,14 +156,8 @@ pub fn refresh_moving_arrows() {
 
 pub fn update_stream(dt: f64) {
     use current_stream;
-    use settings::stream::PHASE_VEL;
-    use piston::vecmath::consts::Radians;
    
-    let shift = dt * PHASE_VEL * Radians::_360();
-    let stream = unsafe { &mut *current_stream() };
-    for arrow_phase in stream.arrow_phases.iter_mut() {
-        *arrow_phase += shift;
-    }
+    unsafe { current_stream() }.update(dt);
 }
 
 pub fn update_moving_arrows(dt: f64) {
