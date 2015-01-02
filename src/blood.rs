@@ -11,6 +11,21 @@ pub struct Blood {
     pub time_since_last_drop: f64,
 }
 
+impl Blood {
+    pub fn insert(&mut self, new_drop: BloodDrop) {
+        // Look for dead blood drops before inserting new.
+        let mut found_dead = false;
+        for blood_drop in self.blood_drops.iter_mut() {
+            if blood_drop.dead {
+                *blood_drop = new_drop;
+                found_dead = true;
+                break;
+            }
+        }
+        if !found_dead { self.blood_drops.push(new_drop) };
+    }
+}
+
 pub fn update_blood(dt: f64) {
     use current_blood;
     use current_player;
@@ -27,21 +42,11 @@ pub fn update_blood(dt: f64) {
     blood.time_since_last_drop += dt;
     if blood.time_since_last_drop > interval {
         blood.time_since_last_drop -= interval;
-        let new_drop = BloodDrop {
+        blood.insert(BloodDrop {
             pos: player.pos,
             time: 0.0,
             dead: false,
-        };
-        // Look for dead blood drops before inserting new.
-        let mut found_dead = false;
-        for blood_drop in blood.blood_drops.iter_mut() {
-            if blood_drop.dead {
-                *blood_drop = new_drop;
-                found_dead = true;
-                break;
-            }
-        }
-        if !found_dead { blood.blood_drops.push(new_drop) };
+        });
     }
 
     // Make blood drops follow stream
