@@ -101,7 +101,7 @@ dependencies = [
 [[package]]
 name = "piston"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/piston#b013e87293b655d75f17734fa1f15eb6fbb465c4"
+source = "git+https://github.com/pistondevelopers/piston#94243742049c304307996a0e9a550356db08d09a"
 dependencies = [
  "fps_counter 0.0.0 (git+https://github.com/pistondevelopers/fps_counter)",
  "image 0.2.0-alpha.4 (git+https://github.com/pistondevelopers/image)",
@@ -145,10 +145,10 @@ dependencies = [
 [[package]]
 name = "piston2d-graphics"
 version = "0.0.1"
-source = "git+https://github.com/pistondevelopers/graphics#84e25d73da520d86b332fad76b92a621b48853ad"
+source = "git+https://github.com/pistondevelopers/graphics#e749a60bf75a4f45ad97b3b4db6c9d96bb4a9a4e"
 dependencies = [
  "piston-texture 0.0.1 (git+https://github.com/pistondevelopers/texture)",
- "pistoncore-current 0.0.3 (git+https://github.com/PistonDevelopers/current)",
+ "quack 0.0.0 (git+https://github.com/PistonDevelopers/quack)",
  "read_color 0.0.1 (git+https://github.com/pistondevelopers/read_color)",
  "vecmath 0.0.1 (git+https://github.com/pistondevelopers/vecmath)",
 ]
@@ -178,7 +178,7 @@ dependencies = [
 [[package]]
 name = "pistoncore-current"
 version = "0.0.3"
-source = "git+https://github.com/PistonDevelopers/current#3d8baa353bb72e53cfe317593f6c024221b9fb9f"
+source = "git+https://github.com/PistonDevelopers/current#6105d4706d2cf822942f11b6ce2d422ecab17769"
 
 [[package]]
 name = "pistoncore-event"
@@ -186,17 +186,17 @@ version = "0.0.1"
 source = "git+https://github.com/pistondevelopers/event#8c35e7ed21777b277b46d9d89bc3ef2d451ab36a"
 dependencies = [
  "pistoncore-current 0.0.3 (git+https://github.com/PistonDevelopers/current)",
- "pistoncore-event_loop 0.0.2 (git+https://github.com/PistonDevelopers/event_loop)",
+ "pistoncore-event_loop 0.0.2 (git+https://github.com/pistondevelopers/event_loop)",
  "pistoncore-input 0.0.3 (git+https://github.com/pistondevelopers/input)",
- "pistoncore-window 0.0.1 (git+https://github.com/PistonDevelopers/window)",
+ "pistoncore-window 0.0.1 (git+https://github.com/pistondevelopers/window)",
 ]
 
 [[package]]
 name = "pistoncore-event_loop"
 version = "0.0.2"
-source = "git+https://github.com/PistonDevelopers/event_loop#6667265f3678a040303bb8df7eed27bede2073cf"
+source = "git+https://github.com/pistondevelopers/event_loop#34593ce6d3ab9a850cc93716bcac39d925e5dab0"
 dependencies = [
- "pistoncore-current 0.0.3 (git+https://github.com/PistonDevelopers/current)",
+ "quack 0.0.0 (git+https://github.com/PistonDevelopers/quack)",
  "time 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -211,11 +211,11 @@ dependencies = [
 [[package]]
 name = "pistoncore-sdl2_window"
 version = "0.0.0"
-source = "git+https://github.com/pistondevelopers/sdl2_window#0cf2bdb594680a1de1e4c7b15bf3385438b9794a"
+source = "git+https://github.com/pistondevelopers/sdl2_window#23363d34f11e7f4af663a8cecac0edb660e48a08"
 dependencies = [
  "gl 0.0.3 (git+https://github.com/bjz/gl-rs)",
  "pistoncore-input 0.0.3 (git+https://github.com/pistondevelopers/input)",
- "pistoncore-window 0.0.1 (git+https://github.com/PistonDevelopers/window)",
+ "pistoncore-window 0.0.1 (git+https://github.com/pistondevelopers/window)",
  "sdl2 0.0.13 (git+https://github.com/AngryLawyer/rust-sdl2)",
  "shader_version 0.0.0 (git+https://github.com/pistondevelopers/shader_version)",
 ]
@@ -223,17 +223,22 @@ dependencies = [
 [[package]]
 name = "pistoncore-window"
 version = "0.0.1"
-source = "git+https://github.com/PistonDevelopers/window#e562213abf861971a4d765f086a04bb017059dbd"
+source = "git+https://github.com/pistondevelopers/window#95ded7849150ef875fa0f158ce7e5c4aae50335a"
 dependencies = [
- "pistoncore-current 0.0.3 (git+https://github.com/PistonDevelopers/current)",
- "pistoncore-event_loop 0.0.2 (git+https://github.com/PistonDevelopers/event_loop)",
+ "pistoncore-event_loop 0.0.2 (git+https://github.com/pistondevelopers/event_loop)",
  "pistoncore-input 0.0.3 (git+https://github.com/pistondevelopers/input)",
+ "quack 0.0.0 (git+https://github.com/PistonDevelopers/quack)",
 ]
 
 [[package]]
 name = "pkg-config"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "quack"
+version = "0.0.0"
+source = "git+https://github.com/PistonDevelopers/quack#6e0294e2115a1f92ad1e8861bdade521f74583de"
 
 [[package]]
 name = "read_color"

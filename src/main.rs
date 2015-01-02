@@ -6,7 +6,7 @@ extern crate serialize;
 extern crate sdl2_mixer;
 extern crate sdl2;
 
-use piston::current::{ Current, CurrentGuard };
+use piston::{ Current, CurrentGuard };
 use sdl2_mixer as mix;
 
 mod blood;
@@ -191,7 +191,7 @@ fn setup() {
 }
 
 fn sea_rect() -> [f64, ..4] {
-    use piston::current::Get;
+    use piston::Get;
 
     let piston::window::DrawSize([w, h]) = piston::current_window().get();
     [0.0, 0.0, w as f64, h as f64]

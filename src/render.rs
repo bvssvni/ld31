@@ -70,7 +70,7 @@ pub fn player(c: &Context, g: &mut Gl) {
     use current_character;
     use piston::graphics::{ Image, RelativeTransform, SrcRect };
     use piston::graphics::interpolation::lerp_4;
-    use piston::current::Set;
+    use piston::Set;
     use player::State;
     use settings::player::{ 
         FRAMES, BITTEN_COLOR, BITTEN_FADE_OUT_SECONDS,
