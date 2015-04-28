@@ -1,13 +1,22 @@
 #![feature(default_type_params)]
 
 extern crate piston;
+extern crate start_piston;
+extern crate graphics;
 extern crate opengl_graphics;
+extern crate vecmath;
+extern crate ai_behavior;
+extern crate interpolation;
+extern crate current;
 extern crate serialize;
-extern crate sdl2_mixer;
 extern crate sdl2;
+extern crate rand;
+#[macro_use]
+extern crate bitflags;
 
-use piston::{ Current, CurrentGuard };
-use sdl2_mixer as mix;
+use current::{ Current, CurrentGuard };
+// use sdl2_mixer as mix;
+use std::path::*;
 
 mod blood;
 mod blood_bar;
@@ -21,10 +30,10 @@ mod stream;
 mod sea_birds;
 
 fn main() {
-    let opengl = piston::shader_version::OpenGL::_3_2;
-    piston::start(
+    let opengl = opengl_graphics::OpenGL::_3_2;
+    start_piston::start(
         opengl,
-        piston::WindowSettings {
+        piston::window::WindowSettings {
             title: "Sea Birds' Breakfast".to_string(),
             size: [640, 480],
             samples: 4,
@@ -35,6 +44,7 @@ fn main() {
     );
 }
 
+/*
 fn init_audio() {
     sdl2::init(sdl2::INIT_AUDIO | sdl2::INIT_TIMER);
     // Load dynamic libraries.
@@ -54,24 +64,29 @@ fn init_audio() {
     ).unwrap();
     mix::allocate_channels(mix::DEFAULT_CHANNELS); 
 }
+*/
 
-pub struct WinMusic(pub mix::Music);
+// pub struct WinMusic(pub mix::Music);
 
+/*
 impl WinMusic {
     pub fn play(&mut self) {
         let &WinMusic(ref mut music) = self;
         music.play(0).unwrap();
     }
 }
+*/
 
-pub struct LoseMusic(pub mix::Music);
+// pub struct LoseMusic(pub mix::Music);
 
+/*
 impl LoseMusic {
     pub fn play(&mut self) {
         let &LoseMusic(ref mut music) = self;
         music.play(0).unwrap();
     }
 }
+*/
 
 #[cfg(feature = "ship")]
 pub fn root() -> Path {
@@ -79,34 +94,34 @@ pub fn root() -> Path {
 }
 
 #[cfg(not(feature = "ship"))]
-pub fn root() -> Path {
-    Path::new("./")
+pub fn root() -> PathBuf {
+    PathBuf::new("./")
 }
 
-fn load_assets(f: ||) {
+fn load_assets(f: &mut Fn) {
     use opengl_graphics::Texture;
 
-    init_audio();
+    // init_audio();
 
     let root = root();
 
     // Load music file. 
-    let background_music = root.join(Path::new("assets/background.wav"));
-    let win_music = root.join(Path::new("./assets/win.wav"));
-    let lose_music = root.join(Path::new("./assets/lose.wav"));
+    // let background_music = root.join(Path::new("assets/background.wav"));
+    // let win_music = root.join(Path::new("./assets/win.wav"));
+    // let lose_music = root.join(Path::new("./assets/lose.wav"));
     
-    let background_music = mix::Music::from_file(&background_music).unwrap();
+    // let background_music = mix::Music::from_file(&background_music).unwrap();
 
-    let blood = root.join(Path::new("./assets/blood.png"));
-    let you_win = root.join(Path::new("./assets/you-win.png"));
-    let you_lose = root.join(Path::new("./assets/you-lose.png"));
-    let palm_tree = root.join(Path::new("./assets/palm-tree.png"));
-    let sea_bird = root.join(Path::new("./assets/sea-bird.png"));
-    let rock = root.join(Path::new("./assets/rock.png"));
-    let character = root.join(Path::new("./assets/character.png"));
+    let blood = root.join("./assets/blood.png");
+    let you_win = root.join("./assets/you-win.png");
+    let you_lose = root.join("./assets/you-lose.png");
+    let palm_tree = root.join("./assets/palm-tree.png");
+    let sea_bird = root.join("./assets/sea-bird.png");
+    let rock = root.join("./assets/rock.png");
+    let character = root.join("./assets/character.png");
  
-    let mut win_music = WinMusic(mix::Music::from_file(&win_music).unwrap());
-    let mut lose_music = LoseMusic(mix::Music::from_file(&lose_music).unwrap());
+    // let mut win_music = WinMusic(mix::Music::from_file(&win_music).unwrap());
+    // let mut lose_music = LoseMusic(mix::Music::from_file(&lose_music).unwrap());
     let mut blood_text = render::BloodText(Texture::from_path(&blood).unwrap());
     let mut you_win_text = render::YouWinText(Texture::from_path(&you_win).unwrap());
     let mut you_lose_text = render::YouLoseText(Texture::from_path(&you_lose).unwrap());
@@ -122,13 +137,13 @@ fn load_assets(f: ||) {
     let sea_bird_guard = CurrentGuard::new(&mut sea_bird);
     let rock_guard = CurrentGuard::new(&mut rock);
     let character_guard = CurrentGuard::new(&mut character);
-    let win_music_guard = CurrentGuard::new(&mut win_music);
-    let lose_music_guard = CurrentGuard::new(&mut lose_music);
+    // let win_music_guard = CurrentGuard::new(&mut win_music);
+    // let lose_music_guard = CurrentGuard::new(&mut lose_music);
 
     // Restart level if not quiting.
-    while !piston::should_close() {
+    while !start_piston::should_close() {
         // Loop infinite times. 
-        background_music.play(-1).unwrap();
+        // background_music.play(-1).unwrap();
         
         f();
     }
@@ -140,8 +155,8 @@ fn load_assets(f: ||) {
     drop(sea_bird_guard);
     drop(rock_guard);
     drop(character_guard);
-    drop(win_music_guard);
-    drop(lose_music_guard);
+    // drop(win_music_guard);
+    // drop(lose_music_guard);
 }
 
 /// Initialize current objects used as application structure
@@ -190,11 +205,9 @@ fn setup() {
     drop(sea_birds_guard);
 }
 
-fn sea_rect() -> [f64, ..4] {
-    use piston::Get;
-
-    let piston::window::DrawSize([w, h]) = piston::current_window().get();
-    [0.0, 0.0, w as f64, h as f64]
+fn sea_rect() -> [f64; 4] {
+    let size = start_piston::current_window().draw_size();
+    [0.0, 0.0, size.width as f64, size.height as f64]
 }
 
 pub unsafe fn current_stream() -> Current<stream::Stream> { Current::new() }
@@ -214,8 +227,8 @@ pub unsafe fn current_sea_birds() -> Current<sea_birds::SeaBirds> { Current::new
 pub unsafe fn current_sea_bird() -> Current<render::SeaBird> { Current::new() }
 pub unsafe fn current_rock() -> Current<render::Rock> { Current::new() }
 pub unsafe fn current_character() -> Current<render::Character> { Current::new() }
-pub unsafe fn current_win_music() -> Current<WinMusic> { Current::new() }
-pub unsafe fn current_lose_music() -> Current<LoseMusic> { Current::new() }
+// pub unsafe fn current_win_music() -> Current<WinMusic> { Current::new() }
+// pub unsafe fn current_lose_music() -> Current<LoseMusic> { Current::new() }
 
 fn start() {
     settings::stream::load();
@@ -224,21 +237,21 @@ fn start() {
     settings::palm_trees::load();
     settings::sea_birds::load();
 
-    let mut cursor: [f64, ..2] = [0.0, ..2];
-    for e in piston::events() {
+    let mut cursor: [f64; 2] = [0.0, ..2];
+    for e in start_piston::events() {
         use piston::event::{ 
             MouseCursorEvent, PressEvent, 
             ReleaseEvent, RenderEvent, UpdateEvent
         };
         let e: piston::event::Event<piston::input::Input> = e;
         e.render(|_args| {
-            piston::render_2d_opengl(
+            start_piston::render_2d_opengl(
                 Some(settings::background_color()), |c, g| {
                 render::render(&c, g);
             });
 
-            piston::set_title(
-                format!("Sea Birds' Breakfast ({})", piston::fps_tick())
+            start_piston::set_title(
+                format!("Sea Birds' Breakfast ({})", start_piston::fps_tick())
             );
         });
         e.update(|args| {

@@ -1,5 +1,5 @@
 pub struct Rock {
-    pub pos: [f64, ..2],
+    pub pos: [f64; 2],
 }
 
 pub struct Rocks {

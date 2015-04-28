@@ -11,7 +11,7 @@ bitflags! {
 }
 
 impl KeyState {
-    pub fn acceleration(&self, d: f64) -> [f64, ..2] {
+    pub fn acceleration(&self, d: f64) -> [f64; 2] {
         let mut acc = [0.0, ..2];
         if self.contains(LEFT) {
             acc[0] -= d;
@@ -35,16 +35,16 @@ pub enum State {
 }
 
 pub struct Player {
-    pub pos: [f64, ..2],
-    pub vel: [f64, ..2],
+    pub pos: [f64; 2],
+    pub vel: [f64; 2],
     pub key_state: KeyState,
     pub time_since_last_frame_update: f64,
-    pub frame: uint,
+    pub frame: usize,
     pub state: State,
 }
 
 impl Player {
-    pub fn new(pos: [f64, ..2]) -> Player {
+    pub fn new(pos: [f64; 2]) -> Player {
         Player {
             pos: pos,
             vel: [0.0, 0.0],
@@ -60,14 +60,13 @@ pub fn update_player(dt: f64) {
     use current_stream;
     use current_player;
     use current_rocks;
-    use piston::vecmath::vec2_add as add;
-    use piston::vecmath::vec2_scale as scale;
-    use piston::vecmath::vec2_sub as sub;
-    use piston::vecmath::vec2_len as len;
-    use piston::vecmath::vec2_square_len as square_len;
+    use vecmath::vec2_add as add;
+    use vecmath::vec2_scale as scale;
+    use vecmath::vec2_sub as sub;
+    use vecmath::vec2_len as len;
+    use vecmath::vec2_square_len as square_len;
     use settings::WATER_FRICTION;
     use settings::player::{ ACC, FRAME_INTERVAL, FRAMES, SPEEDUP };
-    use std::num::Float;
 
     let dt = dt * SPEEDUP;
 

@@ -1,7 +1,7 @@
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct BloodDrop {
-    pub pos: [f64, ..2],
+    pub pos: [f64; 2],
     pub time: f64,
     pub dead: bool,
 }
@@ -30,8 +30,8 @@ pub fn update_blood(dt: f64) {
     use current_blood;
     use current_player;
     use current_stream;
-    use piston::vecmath::vec2_add as add;
-    use piston::vecmath::vec2_scale as scale;
+    use vecmath::vec2_add as add;
+    use vecmath::vec2_scale as scale;
     use settings::blood::{ DROP_INTERVAL, SPAN };
 
     let blood = unsafe { &mut *current_blood() };

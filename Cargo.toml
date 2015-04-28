@@ -5,12 +5,38 @@ version = "0.0.1"
 authors = ["Sven Nilsen <bvssvni@gmail.com>"]
 
 [dependencies.piston]
-
 git = "https://github.com/pistondevelopers/piston"
 
-[dependencies.sdl2_mixer]
+[dependencies.start_piston]
+git = "https://github.com/bvssvni/start_piston"
+features = ["include_sdl2", "include_opengl"]
 
-git = "https://github.com/andelf/rust-sdl2_mixer"
+[dependencies.vecmath]
+git = "https://github.com/pistondevelopers/vecmath"
+
+[dependencies.interpolation]
+git = "https://github.com/pistondevelopers/interpolation"
+
+[dependencies.current]
+git = "https://github.com/pistondevelopers/current"
+
+[dependencies.piston-ai_behavior]
+git = "https://github.com/pistondevelopers/ai_behavior"
+
+[dependencies.piston2d-graphics]
+git = "https://github.com/pistondevelopers/graphics"
+
+[dependencies.piston2d-opengl_graphics]
+git = "https://github.com/pistondevelopers/opengl_graphics"
+
+[dependencies.sdl2]
+git = "https://github.com/AngryLawyer/rust-sdl2"
+
+[dependencies.bitflags]
+version = "*"
+
+[dependencies.rand]
+version = "*"
 
 [features]
 

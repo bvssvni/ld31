@@ -1,6 +1,6 @@
 
 pub struct PalmTrees {
-    pub palms: Vec<[f64, ..2]>
+    pub palms: Vec<[f64; 2]>
 }
 
 

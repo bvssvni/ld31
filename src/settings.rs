@@ -1,14 +1,14 @@
-use piston::graphics::color::hex;
+use graphics::color::hex;
 
-pub const BEACH_ELLIPSE: [f64, ..4] = [500.0, -500.0, 1000.0, 1500.0];
+pub const BEACH_ELLIPSE: [f64; 4] = [500.0, -500.0, 1000.0, 1500.0];
 pub const WATER_FRICTION: f64 = 0.0004;
 pub const EDIT: bool = false;
 
-pub fn background_color() -> [f32, ..4] {
+pub fn background_color() -> [f32; 4] {
     hex("49B1DE")
 }
 
-pub fn beach_color() -> [f32, ..4] {
+pub fn beach_color() -> [f32; 4] {
     hex("F2EABD")
 }
 
@@ -24,12 +24,12 @@ pub mod utils {
 }
 
 pub mod you_win {
-    pub const POS: [f64, ..2] = [193.0, 182.0];
+    pub const POS: [f64; 2] = [193.0, 182.0];
     pub const ZOOM: f64 = 10.0;
 }
 
 pub mod you_lose {
-    pub const POS: [f64, ..2] = [164.0, 198.0];
+    pub const POS: [f64; 2] = [164.0, 198.0];
     pub const ZOOM: f64 = 10.0;
 }
 
@@ -40,12 +40,12 @@ pub mod player {
 
     pub const SPEEDUP: f64 = 2.0;
     // pub const RADIUS: f64 = 5.0;
-    pub const START_POS: [f64, ..2] = [100.0, 100.0];
-    // pub const START_VEL: [f64, ..2] = [0.0, 0.0];
-    // pub const TEST_COLOR: [f32, ..4] = [1.0, ..4];
-    pub const BITTEN_COLOR: [f32, ..4] = [1.0, 0.0, 0.0, 1.0];
+    pub const START_POS: [f64; 2] = [100.0, 100.0];
+    // pub const START_VEL: [f64; 2] = [0.0, 0.0];
+    // pub const TEST_COLOR: [f32; 4] = [1.0, ..4];
+    pub const BITTEN_COLOR: [f32; 4] = [1.0, 0.0, 0.0, 1.0];
     pub const BITTEN_FADE_OUT_SECONDS: f64 = 2.0;
-    pub static FRAMES: &'static [[i32, ..4]] = &[
+    pub static FRAMES: &'static [[i32; 4]] = &[
         [0, 0, 16, 16],
         [16, 0, 16, 16],
         [32, 0, 16, 16],
@@ -69,12 +69,12 @@ pub mod stream {
     use piston::input::{ Button, MouseButton };
     
     pub const ADD_ARROW_BUTTON: Button = Button::Mouse(MouseButton::Left);
-    pub const STRENGTH: [f64, ..2] = [10.0, 50.0];
-    pub const ARROW_COLOR: [f32, ..4] = [0.0, 0.0, 0.7, 0.8];
+    pub const STRENGTH: [f64; 2] = [10.0, 50.0];
+    pub const ARROW_COLOR: [f32; 4] = [0.0, 0.0, 0.7, 0.8];
     pub const ARROW_SIZE: f64 = 5.0;
     pub const SAMPLE_SIZE: f64 = 25.0;
-    // pub const SAMPLE_COLOR: [f32, ..4] = [0.5, 0.5, 0.0, 1.0];
-    pub const MOVING_ARROW_COLOR: [f32, ..4] = [1.0, 1.0, 0.8, 1.0];
+    // pub const SAMPLE_COLOR: [f32; 4] = [0.5, 0.5, 0.0, 1.0];
+    pub const MOVING_ARROW_COLOR: [f32; 4] = [1.0, 1.0, 0.8, 1.0];
     pub const MOVING_ARROW_TIME_SPAN: f64 = 40.0;
     pub const SPEEDUP: f64 = 1.0;
     pub const PHASE_VEL: f64 = 1.0 / 7.0;
@@ -142,24 +142,24 @@ pub mod rocks {
 }
 
 pub mod blood_bar {
-    pub const TEXT_POS: [f64, ..2] = [567.0, 441.0];
+    pub const TEXT_POS: [f64; 2] = [567.0, 441.0];
     pub const ZOOM: f64 = 2.0;
     pub const START_VAL: f64 = 1.0;
-    pub const BAR_POS: [f64, ..2] = [581.0, 433.0];
-    pub const BAR_SIZE: [f64, ..2] = [10.0, 200.0];
+    pub const BAR_POS: [f64; 2] = [581.0, 433.0];
+    pub const BAR_SIZE: [f64; 2] = [10.0, 200.0];
     pub const ROUND_RADIUS: f64 = 5.0;
     pub const MARGIN: f64 = 1.0;
     pub const DEC_VAL: f64 = 0.005;
     // pub const DEC_VAL: f64 = 0.1;    
 
-    pub fn background_color() -> [f32, ..4] {
-        use piston::graphics::color::hex;
+    pub fn background_color() -> [f32; 4] {
+        use graphics::color::hex;
 
         hex("7D3E5F")
     }
 
-    pub fn foreground_color() -> [f32, ..4] {
-        use piston::graphics::color::hex;
+    pub fn foreground_color() -> [f32; 4] {
+        use graphics::color::hex;
 
         hex("FF0000")
     }
@@ -171,8 +171,8 @@ pub mod blood {
     pub const RADIUS: f64 = 10.0;
     pub const SPAN: f64 = 50.0;
 
-    pub fn test_color() -> [f32, ..4] {
-        use piston::graphics::color::hex;
+    pub fn test_color() -> [f32; 4] {
+        use graphics::color::hex;
 
         hex("D12219")
     }

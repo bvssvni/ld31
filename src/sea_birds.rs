@@ -1,7 +1,7 @@
 use piston::event::GenericEvent;
-use piston::ai_behavior;
+use ai_behavior;
 
-#[deriving(Clone)]
+#[derive(Clone)]
 pub enum Action {
     /// Circles forever around target pos.
     Circling,
@@ -18,17 +18,17 @@ pub enum Action {
 /// Sea birds fly around a target,
 /// and if you get within a radius of the target it will attack you.
 pub struct SeaBird {
-    pub pos: [f64, ..2],
-    pub dir: [f64, ..2],
-    pub target: [f64, ..2],
+    pub pos: [f64; 2],
+    pub dir: [f64; 2],
+    pub target: [f64; 2],
     pub circling_angle: f64,
     pub state: ai_behavior::State<Action, ()>,
 }
 
 impl SeaBird {
     pub fn new(
-        pos: [f64, ..2], 
-        target: [f64, ..2], 
+        pos: [f64; 2], 
+        target: [f64; 2], 
         behavior: ai_behavior::Behavior<Action>
     ) -> SeaBird {
         SeaBird {
@@ -48,17 +48,17 @@ pub struct SeaBirds {
 
 impl SeaBirds {
     pub fn new() -> SeaBirds {
-        use piston::ai_behavior::{ 
+        use ai_behavior::{ 
             While, Action, WaitForever, WhenAny, Wait, Sequence
         };
 
         let circling = Action(Action::Circling);
         let circle_until_player_within_distance =
             Sequence(vec![
-                While(box Wait(5.0), vec![
+                While(Box::new(Wait(5.0)), vec![
                     circling.clone()
                 ]),
-                While(box Action(Action::PlayerWithinDistance(50.0)), vec![
+                While(Box::new(Action(Action::PlayerWithinDistance(50.0))), vec![
                     circling.clone()
                 ]),
             ]);
@@ -70,10 +70,10 @@ impl SeaBirds {
             ])
         ]);
         let attack_attempt =
-            While(box give_up_or_attack, vec![
+            While(Box::new(give_up_or_attack), vec![
                 Action(Action::FlyTowardPlayer)
             ]);
-        let behavior = While(box WaitForever, vec![
+        let behavior = While(Box::new(WaitForever), vec![
             circle_until_player_within_distance,
             attack_attempt,
         ]);
@@ -87,15 +87,14 @@ impl SeaBirds {
 pub fn update_sea_birds<E: GenericEvent>(e: &E) {
     use current_sea_birds;
     use current_player;
-    use piston::vecmath::vec2_add as add;
-    use piston::vecmath::vec2_scale as scale;
-    use piston::vecmath::vec2_sub as sub;
-    use piston::vecmath::vec2_len as len;
-    use piston::vecmath::vec2_normalized_sub as normalized_sub;
-    use piston::vecmath::consts::Radians;
+    use vecmath::vec2_add as add;
+    use vecmath::vec2_scale as scale;
+    use vecmath::vec2_sub as sub;
+    use vecmath::vec2_len as len;
+    use vecmath::vec2_normalized_sub as normalized_sub;
+    use vecmath::traits::Radians;
     use settings::sea_birds::circling;
     use settings::sea_birds::SPEEDUP;
-    use std::num::FloatMath;
     use blood_bar;
     use player;
 

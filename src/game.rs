@@ -1,5 +1,5 @@
 
-#[deriving(Copy, PartialEq, Eq)]
+#[derive(Copy, PartialEq, Eq)]
 pub enum GameState {
     Play,
     Lose,
@@ -18,8 +18,8 @@ pub fn should_update() -> bool {
 pub fn update_game_state() {
     use current_game_state;
     use current_blood_bar;
-    use current_win_music;
-    use current_lose_music;
+    // use current_win_music;
+    // use current_lose_music;
     use blood_bar::BloodBar;
 
     let state = unsafe { &mut *current_game_state() };
@@ -28,11 +28,11 @@ pub fn update_game_state() {
     *state = match *state {
         GameState::Play => {
             if won() {
-                unsafe { current_win_music() }.play();
+                // unsafe { current_win_music() }.play();
 
                 GameState::Win
             } else if blood_bar == 0.0 {
-                unsafe { current_lose_music() }.play();
+                // unsafe { current_lose_music() }.play();
 
                 GameState::Lose
             } else {
@@ -48,7 +48,7 @@ pub fn won() -> bool {
     use settings::BEACH_ELLIPSE;
 
     let player = unsafe { &mut *current_player() };
-    let [x, y] = player.pos;
+    let (x, y) = (player.pos[0], player.pos[1]);
     let beach = BEACH_ELLIPSE;
     let rw = 0.5 * beach[2];
     let rh = 0.5 * beach[3];

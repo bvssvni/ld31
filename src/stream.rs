@@ -1,17 +1,17 @@
 //! Describes the sea current
 
 /// The current selected arrow.
-#[deriving(Copy)]
-pub struct SelectedArrow(pub Option<uint>);
+#[derive(Copy)]
+pub struct SelectedArrow(pub Option<usize>);
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Arrow {
-    pub pos: [f64, ..2],
-    pub dir: [f64, ..2],
+    pub pos: [f64; 2],
+    pub dir: [f64; 2],
 }
 
 impl Arrow {
-    pub fn line(&self, speedup: f64) -> [f64, ..4] {
+    pub fn line(&self, speedup: f64) -> [f64; 4] {
         [
             self.pos[0],
             self.pos[1],
@@ -23,7 +23,7 @@ impl Arrow {
 
 pub struct MovingArrow {
     pub arrow: Arrow,
-    pub start_pos: [f64, ..2],
+    pub start_pos: [f64; 2],
     pub time: f64,
 }
 
@@ -31,9 +31,9 @@ pub struct Stream {
     /// Arrows that describe the stream current
     pub arrows: Vec<Arrow>,
     /// A rectangle used to pick random coordinates
-    pub rect: [f64, ..4],
+    pub rect: [f64; 4],
     /// A range to pick random sea current strength
-    pub strength: [f64, ..2],
+    pub strength: [f64; 2],
     /// The phase of the arrow the moment they were added.
     pub arrow_phases: Vec<f64>,
 }
@@ -45,12 +45,11 @@ impl Stream {
     }
     
     /// Computes stream at position using weighted average
-    pub fn at(&self, pos: [f64, ..2]) -> [f64, ..2] {
-        use piston::vecmath::vec2_add as add;
-        use piston::vecmath::vec2_sub as sub;
-        use piston::vecmath::vec2_len as len;
-        use piston::vecmath::vec2_scale as scale;
-        use std::num::FloatMath;
+    pub fn at(&self, pos: [f64; 2]) -> [f64; 2] {
+        use vecmath::vec2_add as add;
+        use vecmath::vec2_sub as sub;
+        use vecmath::vec2_len as len;
+        use vecmath::vec2_scale as scale;
 
         if self.arrows.len() == 0 { return [0.0, ..2]; }
 
@@ -67,14 +66,14 @@ impl Stream {
         scale(sum, 1.0 / sum_w)
     }
 
-    pub fn nm(&self, sample_size: f64) -> [u32, ..2] {
-        let [_, _, w, h] = self.rect;
+    pub fn nm(&self, sample_size: f64) -> [u32; 2] {
+        let (w, h) = (self.rect[2], self.rect[3]);
         [(w / sample_size) as u32, (h / sample_size) as u32]
     }
 
     pub fn update(&mut self, dt: f64) {
         use settings::stream::PHASE_VEL;
-        use piston::vecmath::consts::Radians;
+        use vecmath::traits::Radians;
        
         let shift = dt * PHASE_VEL * Radians::_360();
         for arrow_phase in self.arrow_phases.iter_mut() {
@@ -84,11 +83,11 @@ impl Stream {
 
 }
 
-pub fn add_arrow(pos: [f64, ..2]) {
+pub fn add_arrow(pos: [f64; 2]) {
     use current_stream;
     use current_selected_arrow;
-    use std::rand::random;
-    use piston::vecmath::consts::Radians;
+    use rand::{ rand, thread_rng };
+    use vecmath::traits::Radians;
 
     let stream = unsafe { &mut *current_stream() };
     let selected_arrow = unsafe { &mut *current_selected_arrow() };
@@ -98,18 +97,18 @@ pub fn add_arrow(pos: [f64, ..2]) {
             pos: pos,
             dir: [0.0, ..2],
         },
-        random::<f64>() * Radians::_360()
+        and(&mut thread_rng()) * Radians::_360()
     );
 
     let id = stream.arrows.len() - 1;
     *selected_arrow = SelectedArrow(Some(id));
 }
 
-pub fn edit_selected_arrow(pos: [f64, ..2]) {
+pub fn edit_selected_arrow(pos: [f64; 2]) {
     use current_stream;
     use current_selected_arrow;
-    use piston::vecmath::vec2_sub as sub;
-    use piston::vecmath::vec2_scale as scale;
+    use vecmath::vec2_sub as sub;
+    use vecmath::vec2_scale as scale;
     use settings::stream::SPEEDUP;
 
     let stream = unsafe { &mut *current_stream() };
@@ -136,10 +135,11 @@ pub fn refresh_moving_arrows() {
     let moving_arrows = unsafe { &mut *current_moving_arrows() };
     
     moving_arrows.clear();
-    let [x, y, _, _] = stream.rect;
-    let [n, m] = stream.nm(SAMPLE_SIZE);
-    for i in range(0, n) {
-        for j in range(0, m) {
+    let (x, y) = (stream.rect[0], stream.rect[1]);
+    let stream_nm = stream.nm(SAMPLE_SIZE);
+    let (n, m) = (stream_nm[0], stream_nm[1]);
+    for i in 0 ..n {
+        for j in 0 .. m {
             let sx = i as f64 * SAMPLE_SIZE + x;
             let sy = j as f64 * SAMPLE_SIZE + y;
             moving_arrows.push(MovingArrow {
@@ -163,9 +163,9 @@ pub fn update_stream(dt: f64) {
 pub fn update_moving_arrows(dt: f64) {
     use current_stream;
     use current_moving_arrows;
-    use piston::vecmath::vec2_add as add;
-    use piston::vecmath::vec2_scale as scale;
-    use piston::vecmath::vec2_len as len;
+    use vecmath::vec2_add as add;
+    use vecmath::vec2_scale as scale;
+    use vecmath::vec2_len as len;
     use settings::stream::{ MOVING_ARROW_TIME_SPAN, SPEEDUP };
 
     let stream = unsafe { &mut *current_stream() };
