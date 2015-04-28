@@ -12,7 +12,7 @@ bitflags! {
 
 impl KeyState {
     pub fn acceleration(&self, d: f64) -> [f64; 2] {
-        let mut acc = [0.0, ..2];
+        let mut acc = [0.0; 2];
         if self.contains(LEFT) {
             acc[0] -= d;
         }

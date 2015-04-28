@@ -1,5 +1,3 @@
-#![feature(default_type_params)]
-
 extern crate piston;
 extern crate start_piston;
 extern crate graphics;
@@ -8,7 +6,6 @@ extern crate vecmath;
 extern crate ai_behavior;
 extern crate interpolation;
 extern crate current;
-extern crate serialize;
 extern crate sdl2;
 extern crate rand;
 #[macro_use]
@@ -33,14 +30,14 @@ fn main() {
     let opengl = opengl_graphics::OpenGL::_3_2;
     start_piston::start(
         opengl,
-        piston::window::WindowSettings {
-            title: "Sea Birds' Breakfast".to_string(),
-            size: [640, 480],
-            samples: 4,
-            fullscreen: false,
-            exit_on_esc: true,
-        },
-        || load_assets(|| setup())
+        piston::window::WindowSettings::new(
+            "Sea Birds' Breakfast", [640, 480]
+        )
+            .samples(4)
+            .fullscreen(false)
+            .exit_on_esc(true)
+        ,
+        &mut || load_assets(&mut || setup())
     );
 }
 
@@ -95,10 +92,10 @@ pub fn root() -> Path {
 
 #[cfg(not(feature = "ship"))]
 pub fn root() -> PathBuf {
-    PathBuf::new("./")
+    PathBuf::from("./")
 }
 
-fn load_assets(f: &mut Fn) {
+fn load_assets(f: &mut FnMut()) {
     use opengl_graphics::Texture;
 
     // init_audio();
@@ -206,7 +203,10 @@ fn setup() {
 }
 
 fn sea_rect() -> [f64; 4] {
-    let size = start_piston::current_window().draw_size();
+    use piston::window::Window;
+
+    let window = start_piston::current_window();
+    let size = (&*window.borrow()).draw_size();
     [0.0, 0.0, size.width as f64, size.height as f64]
 }
 
@@ -237,7 +237,7 @@ fn start() {
     settings::palm_trees::load();
     settings::sea_birds::load();
 
-    let mut cursor: [f64; 2] = [0.0, ..2];
+    let mut cursor: [f64; 2] = [0.0; 2];
     for e in start_piston::events() {
         use piston::event::{ 
             MouseCursorEvent, PressEvent, 

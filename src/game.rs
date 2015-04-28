@@ -1,5 +1,5 @@
 
-#[derive(Copy, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 pub enum GameState {
     Play,
     Lose,
@@ -23,7 +23,7 @@ pub fn update_game_state() {
     use blood_bar::BloodBar;
 
     let state = unsafe { &mut *current_game_state() };
-    let &BloodBar(blood_bar) = unsafe { &mut *current_blood_bar() };
+    let &mut BloodBar(blood_bar) = unsafe { &mut *current_blood_bar() };
 
     *state = match *state {
         GameState::Play => {

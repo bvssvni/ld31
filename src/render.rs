@@ -1,4 +1,4 @@
-use graphics::{ Graphics, Context };
+use graphics::Context;
 use opengl_graphics::{ Texture, GlGraphics };
 
 pub struct BloodText(pub Texture);
@@ -33,7 +33,8 @@ pub fn stream_arrows(c: &Context, g: &mut GlGraphics) {
     let stream = unsafe { &mut *current_stream() };
     let line = graphics::Line::new(ARROW_COLOR, 2.0);
     for arrow in stream.arrows.iter() {
-        line.draw_arrow(arrow.line(SPEEDUP), ARROW_SIZE, c, g);
+        line.draw_arrow(arrow.line(SPEEDUP), ARROW_SIZE,
+            &c.draw_state, c.transform, g);
     }
 }
 
@@ -57,7 +58,8 @@ pub fn moving_arrows(c: &Context, g: &mut GlGraphics) {
         let alpha = 1.0 - f * f;
         line.color = [red, green, blue, alpha as f32];
         // line.draw_arrow(moving_arrow.arrow.line(SPEEDUP), ARROW_SIZE, c, g);
-        line.draw(moving_arrow.arrow.line(SPEEDUP), c, g);
+        line.draw(moving_arrow.arrow.line(SPEEDUP),
+            &c.draw_state, c.transform, g);
     }
 }
 
@@ -65,7 +67,8 @@ pub fn beach(c: &Context, g: &mut GlGraphics) {
     use graphics::Ellipse;
     use settings::{ beach_color, BEACH_ELLIPSE };
 
-    Ellipse::new(beach_color()).draw(BEACH_ELLIPSE, c, g);
+    Ellipse::new(beach_color()).draw(BEACH_ELLIPSE,
+        &c.draw_state, c.transform, g);
 }
 
 pub fn player(c: &Context, g: &mut GlGraphics) {
@@ -78,7 +81,7 @@ pub fn player(c: &Context, g: &mut GlGraphics) {
         FRAMES, BITTEN_COLOR, BITTEN_FADE_OUT_SECONDS,
     };
 
-    let &Character(ref texture ) = unsafe { &mut *current_character() };
+    let &mut Character(ref texture ) = unsafe { &mut *current_character() };
     let player = unsafe { &mut *current_player() };
     let (x, y) = (player.pos[0], player.pos[1]);
     // Rectangle::new(TEST_COLOR).draw(centered_square(x, y, radius), c, g);
@@ -86,12 +89,13 @@ pub fn player(c: &Context, g: &mut GlGraphics) {
     match player.state {
         State::Bitten(sec) => {
             let t = 1.0 - sec / BITTEN_FADE_OUT_SECONDS;
-            let color = lerp(&BITTEN_COLOR, &[1.0, ..4], &(t as f32));
-            Image::colored(color)
+            let color = lerp(&BITTEN_COLOR, &[1.0; 4], &(t as f32));
+            Image::new_colored(color)
         }
         _ => Image::new()
     }.src_rect(frame).draw(texture, 
-        &c.trans(x, y)
+        &c.draw_state,
+        c.transform.trans(x, y)
           .zoom(2.0)
           .trans(-0.5 * frame[2] as f64, -0.5 * frame[3] as f64), 
         g
@@ -105,7 +109,7 @@ pub fn rocks(c: &Context, g: &mut GlGraphics) {
     use graphics::Transformed;
     use graphics::ImageSize;
 
-    let &Rock(ref texture) = unsafe { &mut *current_rock() };
+    let &mut Rock(ref texture) = unsafe { &mut *current_rock() };
     let (w, h) = texture.get_size();
     let (w, h) = (w as f64, h as f64);
     let rocks = unsafe { &mut *current_rocks() };
@@ -113,7 +117,7 @@ pub fn rocks(c: &Context, g: &mut GlGraphics) {
     for rock in rocks.rocks.iter() {
         let (x, y) = (rock.pos[0], rock.pos[1]);
         // ellipse.draw(circle(x, y, radius), c, g);
-        image(texture, &c.trans(x, y).zoom(1.05).trans(-0.5 * w, -0.5 * h), g);
+        image(texture, c.transform.trans(x, y).zoom(1.05).trans(-0.5 * w, -0.5 * h), g);
     }
 }
 
@@ -131,15 +135,15 @@ pub fn blood_bar(c: &Context, g: &mut GlGraphics) {
     };
     use blood_bar::BloodBar;
 
-    let &BloodText(ref blood_text) = unsafe { &mut *current_blood_text() };
-    let &BloodBar(bar) = unsafe { &mut *current_blood_bar() };
+    let &mut BloodText(ref blood_text) = unsafe { &mut *current_blood_text() };
+    let &mut BloodBar(bar) = unsafe { &mut *current_blood_bar() };
     
     let pos = TEXT_POS;
     let zoom = ZOOM;
-    image(blood_text, &c.trans(pos[0], pos[1]).zoom(zoom), g);
+    image(blood_text, c.transform.trans(pos[0], pos[1]).zoom(zoom), g);
 
     let rect = [BAR_POS[0], BAR_POS[1] - BAR_SIZE[1], BAR_SIZE[0], BAR_SIZE[1]];
-    Rectangle::round(background_color(), ROUND_RADIUS).draw(rect, c, g);    
+    Rectangle::new_round(background_color(), ROUND_RADIUS).draw(rect, &c.draw_state, c.transform, g);    
     let full_bar_height = BAR_SIZE[1] - 2.0 * MARGIN;
     let bar_height = full_bar_height * bar;
     let rect = [
@@ -148,7 +152,8 @@ pub fn blood_bar(c: &Context, g: &mut GlGraphics) {
         BAR_SIZE[0] - 2.0 * MARGIN,
         bar_height
     ];
-    Rectangle::round(foreground_color(), ROUND_RADIUS).draw(margin(rect, MARGIN), c, g);
+    Rectangle::new_round(foreground_color(), ROUND_RADIUS).draw(margin(rect, MARGIN),
+        &c.draw_state, c.transform, g);
 }
 
 pub fn you_win(c: &Context, g: &mut GlGraphics) {
@@ -162,8 +167,8 @@ pub fn you_win(c: &Context, g: &mut GlGraphics) {
     let game_state = unsafe { *current_game_state() };
     if game_state != GameState::Win { return; }
 
-    let &YouWinText(ref texture) = unsafe { &mut *current_you_win_text() };
-    image(texture, &c.trans(POS[0], POS[1]).zoom(ZOOM), g);
+    let &mut YouWinText(ref texture) = unsafe { &mut *current_you_win_text() };
+    image(texture, c.transform.trans(POS[0], POS[1]).zoom(ZOOM), g);
 }
 
 pub fn you_lose(c: &Context, g: &mut GlGraphics) {
@@ -177,8 +182,8 @@ pub fn you_lose(c: &Context, g: &mut GlGraphics) {
     let game_state = unsafe { *current_game_state() };
     if game_state != GameState::Lose { return; }
 
-    let &YouLoseText(ref texture) = unsafe { &mut *current_you_lose_text() };
-    image(texture, &c.trans(POS[0], POS[1]).zoom(ZOOM), g);
+    let &mut YouLoseText(ref texture) = unsafe { &mut *current_you_lose_text() };
+    image(texture, c.transform.trans(POS[0], POS[1]).zoom(ZOOM), g);
 }
 
 pub fn blood(c: &Context, g: &mut GlGraphics) {
@@ -198,7 +203,8 @@ pub fn blood(c: &Context, g: &mut GlGraphics) {
         let f = blood_drop.time / SPAN;
         let radius = START_RADIUS + (RADIUS - START_RADIUS) * f;
         let alpha = 1.0 - f;
-        Ellipse::new([red, green, blue, alpha as f32]).draw(circle(x, y, radius), c, g);
+        Ellipse::new([red, green, blue, alpha as f32]).draw(circle(x, y, radius),
+            &c.draw_state, c.transform, g);
     }
 }
 
@@ -208,11 +214,11 @@ pub fn palm_tree(c: &Context, g: &mut GlGraphics) {
     use graphics::image;
     use graphics::Transformed;
 
-    let &PalmTree(ref texture) = unsafe { &mut *current_palm_tree() };
+    let &mut PalmTree(ref texture) = unsafe { &mut *current_palm_tree() };
     let palm_trees = unsafe { &mut *current_palm_trees() };
 
     for pos in palm_trees.palms.iter() {
-        image(texture, &c.trans(pos[0], pos[1]), g);
+        image(texture, c.transform.trans(pos[0], pos[1]), g);
     }
 }
 
@@ -223,14 +229,14 @@ pub fn sea_birds(c: &Context, g: &mut GlGraphics) {
     use graphics::Transformed;
 
     let sea_birds = unsafe { &mut *current_sea_birds() };
-    let &SeaBird(ref texture) = unsafe { &mut *current_sea_bird() };
+    let &mut SeaBird(ref texture) = unsafe { &mut *current_sea_bird() };
 
     // let rect = Rectangle::new(TEST_COLOR);
     for sea_bird in sea_birds.birds.iter() {
         let (x, y) = (sea_bird.pos[0], sea_bird.pos[1]);
         let (dx, dy) = (sea_bird.dir[0], sea_bird.dir[1]);
         // rect.draw(centered_square(x, y, RADIUS), c, g);
-        image(texture, &c.trans(x, y).orient(dx, dy).zoom(2.0).trans(-5.0, -6.0), g);
+        image(texture, c.transform.trans(x, y).orient(dx, dy).zoom(2.0).trans(-5.0, -6.0), g);
     }
 }
 

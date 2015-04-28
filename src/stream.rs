@@ -1,10 +1,10 @@
 //! Describes the sea current
 
 /// The current selected arrow.
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 pub struct SelectedArrow(pub Option<usize>);
 
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 pub struct Arrow {
     pub pos: [f64; 2],
     pub dir: [f64; 2],
@@ -51,9 +51,9 @@ impl Stream {
         use vecmath::vec2_len as len;
         use vecmath::vec2_scale as scale;
 
-        if self.arrows.len() == 0 { return [0.0, ..2]; }
+        if self.arrows.len() == 0 { return [0.0; 2]; }
 
-        let mut sum = [0.0, ..2];
+        let mut sum = [0.0; 2];
         let mut sum_w = 0.0;
         for (i, arrow) in self.arrows.iter().enumerate() {
             let l = len(sub(arrow.pos, pos)).max(0.01);
@@ -75,7 +75,7 @@ impl Stream {
         use settings::stream::PHASE_VEL;
         use vecmath::traits::Radians;
        
-        let shift = dt * PHASE_VEL * Radians::_360();
+        let shift: f64 = dt * PHASE_VEL * <f64 as Radians>::_360();
         for arrow_phase in self.arrow_phases.iter_mut() {
             *arrow_phase += shift;
         }
@@ -86,7 +86,7 @@ impl Stream {
 pub fn add_arrow(pos: [f64; 2]) {
     use current_stream;
     use current_selected_arrow;
-    use rand::{ rand, thread_rng };
+    use rand::{ Rand, thread_rng };
     use vecmath::traits::Radians;
 
     let stream = unsafe { &mut *current_stream() };
@@ -95,9 +95,9 @@ pub fn add_arrow(pos: [f64; 2]) {
     stream.add_arrow(
         Arrow {
             pos: pos,
-            dir: [0.0, ..2],
+            dir: [0.0; 2],
         },
-        and(&mut thread_rng()) * Radians::_360()
+        <f64 as Rand>::rand(&mut thread_rng()) * <f64 as Radians>::_360()
     );
 
     let id = stream.arrows.len() - 1;
@@ -112,7 +112,7 @@ pub fn edit_selected_arrow(pos: [f64; 2]) {
     use settings::stream::SPEEDUP;
 
     let stream = unsafe { &mut *current_stream() };
-    let &SelectedArrow(selected_arrow) = unsafe { &mut *current_selected_arrow() };
+    let &mut SelectedArrow(selected_arrow) = unsafe { &mut *current_selected_arrow() };
     let id = match selected_arrow {
         None => { return; }
         Some(x) => x

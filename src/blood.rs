@@ -1,5 +1,5 @@
 
-#[derive(Copy)]
+#[derive(Copy, Clone)]
 pub struct BloodDrop {
     pub pos: [f64; 2],
     pub time: f64,

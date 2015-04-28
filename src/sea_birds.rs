@@ -103,7 +103,7 @@ pub fn update_sea_birds<E: GenericEvent>(e: &E) {
 
     let _360: f64 = Radians::_360();
     for sea_bird in sea_birds.birds.iter_mut() {
-        let &SeaBird {
+        let &mut SeaBird {
             ref mut state,
             ref mut circling_angle,
             ref target,
@@ -111,7 +111,7 @@ pub fn update_sea_birds<E: GenericEvent>(e: &E) {
             ref mut dir,
             ..
         } = sea_bird;
-        state.event(e, |_, dt, action, _| {
+        state.event(e, &mut |_, dt, action, _| {
              match *action {
                 Action::Circling => {
                     let angle = *circling_angle;

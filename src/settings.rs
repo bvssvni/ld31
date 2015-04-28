@@ -87,7 +87,7 @@ pub mod stream {
 
         // Just split by comma.
         let data = include_str!("../assets/stream.txt");
-        let mut data_split = data.split_str(",");
+        let mut data_split = data.split(",");
         loop {
             let x: f64 = match data_split.next() {
                     None => { break; }
@@ -126,7 +126,7 @@ pub mod rocks {
 
         // Just split by comma.
         let data = include_str!("../assets/rocks.txt");
-        let mut data_split = data.split_str(",");
+        let mut data_split = data.split(",");
         loop {
             let x: f64 = match data_split.next() {
                     None => { break; }
@@ -186,7 +186,7 @@ pub mod palm_trees {
 
         // Just split by comma.
         let data = include_str!("../assets/palm_trees.txt");
-        let mut data_split = data.split_str(",");
+        let mut data_split = data.split(",");
         loop {
             let x: f64 = match data_split.next() {
                     None => { break; }
@@ -223,7 +223,7 @@ pub mod sea_birds {
 
         // Just split by comma.
         let data = include_str!("../assets/sea_birds.txt");
-        let mut data_split = data.split_str(",");
+        let mut data_split = data.split(",");
         loop {
             let x: f64 = match data_split.next() {
                     None => { break; }
